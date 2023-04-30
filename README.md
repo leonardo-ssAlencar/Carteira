@@ -1,0 +1,1 @@
+# projeto para cadeira de Padrões de Projeto do curso Superior de Engenharia da Computação

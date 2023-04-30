@@ -1,11 +1,14 @@
-package com.padroes.projetos.carteira.model.entidades;
+package com.padroes.projetos.carteira.model.entidades.grupo;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+// @Entity
 public class Usuario implements GrupoComponent {
+
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String telefone;
@@ -13,6 +16,9 @@ public class Usuario implements GrupoComponent {
     private String senha;
     private GrupoComponent parente;
     private List<Usuario> dependentes;
+
+    public Usuario() {
+    }
 
     public Usuario(String nome, String telefone, String email, String senha) {
         this.nome = nome;
@@ -70,22 +76,15 @@ public class Usuario implements GrupoComponent {
         this.parente = parente;
     }
 
-    @Override
-    public List<GrupoComponent> getFilhos() {
-        List<GrupoComponent> lista = new ArrayList<>();
-
-        dependentes.stream().forEach(x -> {
-            lista.add(x);
-        });
-
-        return lista;
-    }
-
-    public void setFilhos(Usuario dependentes) {
+    public void setDependente(Usuario dependentes) {
         if (this.dependentes == null) {
             this.dependentes = new LinkedList<>();
         }
         this.dependentes.add(dependentes);
+    }
+
+    public List<Usuario> getDependentes() {
+        return dependentes;
     }
 
     @Override

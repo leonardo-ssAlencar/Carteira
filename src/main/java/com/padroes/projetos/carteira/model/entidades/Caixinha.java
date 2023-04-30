@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
+import com.padroes.projetos.carteira.model.entidades.grupo.GrupoComponent;
+
 public class Caixinha {
 
     private Long id;

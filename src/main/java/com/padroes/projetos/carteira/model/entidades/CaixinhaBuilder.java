@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 public class CaixinhaBuilder {
     private Caixinha caixinha;
-    private boolean temItems = false;
 
     public CaixinhaBuilder diaFechamento(LocalDate data) {
         return this;
@@ -21,11 +20,6 @@ public class CaixinhaBuilder {
     public CaixinhaBuilder notificacao(EstrategiaNotificacao estrategia) {
         return this;
 
-    }
-
-    public CaixinhaBuilder items(boolean temItems) {
-        this.temItems = temItems;
-        return this;
     }
 
     public Caixinha build() {

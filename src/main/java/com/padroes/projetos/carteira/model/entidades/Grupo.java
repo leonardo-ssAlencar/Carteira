@@ -7,48 +7,24 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.padroes.projetos.carteira.model.entidades.excecoes.ComponenteNulo;
+
 public class Grupo implements GrupoComponent {
 
     private String nome;
     private GrupoComponent parente; // É o objeto que contém
+    private GrupoComponent dono;
     private List<Participante> filhos = new ArrayList<>();
+    private Caixinha caixinha;
 
     // Cria um novo Grupo
     public Grupo(String nome, GrupoComponent parente) {
-        if (parente == null) {
-            // TODO Lançar uma exceção
-        }
-
-        this.nome = nome;
-        this.parente = parente;
-
-        Participante participante;
-
-        participante = new Participante(parente);
-
-        if (participante.eGrupo()) {
-            Grupo grupo = (Grupo) participante.getParticipante();
-            this.filhos.addAll(grupo.filhos.stream().filter(Participante::eAdmin).toList());
-
-            return;
-        }
-
-        participante.eAdmin = true;
-        this.filhos.add(participante);
 
     }
 
     // Cria um novo grupo de usuario
     public Grupo(Usuario user) {
-        if (user == null) {
-            // TODO Lançar uma exceção
-        }
-        this.nome = user.getNome();
-        this.parente = GrupoComponent.root;
-        Participante participante = new Participante(user);
-        participante.setAdmin(true);
-        this.filhos.add(participante);
-        user.setParente(this);
+
     }
 
     /**
@@ -95,6 +71,11 @@ public class Grupo implements GrupoComponent {
      */
     public Grupo setParticipante(GrupoComponent participante) {
 
+        if (this.parente == GrupoComponent.root && participante instanceof Usuario) {
+            // TODO criar uma exception personalizada
+            throw new RuntimeException("Não é possivel adicionar outro usuario a um grupo raiz");
+
+        }
         Participante p = new Participante(participante);
 
         this.filhos.add(p);
@@ -117,6 +98,14 @@ public class Grupo implements GrupoComponent {
         }
     }
 
+    public Caixinha getCaixinha() {
+        return caixinha;
+    }
+
+    public void setCaixinha(Caixinha caixinha) {
+        this.caixinha = caixinha;
+    }
+
     public void setAdmin(Usuario user) {
 
         Predicate<Participante> eUsuario = Participante::eUsuario;
@@ -127,6 +116,14 @@ public class Grupo implements GrupoComponent {
                 });
         ;
 
+    }
+
+    public GrupoComponent getDono() {
+        return dono;
+    }
+
+    public void setDono(GrupoComponent dono) {
+        this.dono = dono;
     }
 
     /**

@@ -1,8 +1,9 @@
 package com.padroes.projetos.carteira.model.entidades.grupo;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import com.padroes.projetos.carteira.model.entidades.Caixinha;
 
@@ -19,7 +20,7 @@ public class Grupo implements GrupoComponent {
     // O dono do grupo, normalmente quem o criou
     private GrupoComponent dono;
     // Lista dos participantes do grupo
-    private List<Participante> participantes;
+    private Set<Participante> participantes = new HashSet<>();
     // A Caixinha do grupo
     private Caixinha caixinha;
 
@@ -28,7 +29,6 @@ public class Grupo implements GrupoComponent {
     }
 
     public Grupo(String nome, GrupoComponent parente, GrupoComponent dono, Caixinha caixinha) {
-        this.participantes = new ArrayList<>();
         this.nome = nome;
         this.parente = parente;
         this.dono = dono;
@@ -52,23 +52,30 @@ public class Grupo implements GrupoComponent {
     }
 
     public List<GrupoComponent> getParticipantes() {
-        verificarRaiz();
         return participantes.stream().map(Participante::getParticipante).toList();
     }
 
-    public void setParticipantes(GrupoComponent participante) {
-        verificarRaiz();
-        if (this.participantes == null) {
-            this.participantes = new ArrayList<>();
+    public boolean setParticipantes(GrupoComponent participante) {
 
-        }
-        this.participantes.add(Participante.of(participante));
+        if (participante instanceof Usuario)
+            verificarRaiz();
+
+        return this.participantes.add(new Participante(participante));
 
     }
 
-    public void setParticipantes(List<? extends GrupoComponent> filhos) {
-        verificarRaiz();
-        this.participantes.addAll(filhos.stream().map(Participante::of).toList());
+    public boolean setParticipantes(List<? extends GrupoComponent> filhos) {
+        if (parente instanceof Usuario)
+            verificarRaiz();
+
+        List<Participante> novoParticipantes = filhos.stream().map(x -> new Participante(x)).toList();
+
+        if (this.parente == GrupoInterface.grupoRaiz) {
+            return this.participantes.addAll(novoParticipantes.stream().filter(Participante::eGrupo).toList());
+
+        }
+        return this.participantes.addAll(novoParticipantes);
+
     }
 
     public Caixinha getCaixinha() {
@@ -81,15 +88,28 @@ public class Grupo implements GrupoComponent {
 
     public void tornarAdmin(Usuario usuario) {
         verificarRaiz();
-        this.participantes.stream().filter(Participante::eUsuario).filter(x -> x.getParticipante().equals(usuario))
-                .forEach(x -> {
-                    x.eAdmin = true;
-                });
+        Optional<Participante> componente = this.participantes.stream().filter(Participante::eUsuario)
+                .filter(x -> x.getParticipante().equals(usuario)).findAny();
+
+        if (componente.isEmpty()) {
+            throw new RuntimeException();
+        }
+
+        componente.get().eAdmin = true;
+
     }
 
     public List<Usuario> getAdministradores() {
-        verificarRaiz();
-        return participantes.stream().filter(Participante::eAdmin).filter(Participante::eUsuario)
+
+        Set<Usuario> user = new HashSet<>();
+        if (this.dono instanceof Grupo) {
+            Grupo grupo = (Grupo) this.dono;
+
+            user.addAll(grupo.getAdministradores());
+
+        }
+
+        return participantes.stream().filter(Participante::eUsuario).filter(Participante::eAdmin)
                 .map(x -> (Usuario) x.getParticipante()).toList();
 
     }
@@ -112,29 +132,70 @@ public class Grupo implements GrupoComponent {
         return this.nome;
     }
 
+    @Override
+    public String toString() {
+        return "Grupo [id=" + id + ", nome=" + nome + ", parente=" + parente.getNome() + ", dono=" + dono.getNome()
+                + ", caixinha="
+                + caixinha + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((parente == null) ? 0 : parente.hashCode());
+        result = prime * result + ((dono == null) ? 0 : dono.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Grupo other = (Grupo) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (parente == null) {
+            if (other.parente != null)
+                return false;
+        } else if (!parente.equals(other.parente))
+            return false;
+        if (dono == null) {
+            if (other.dono != null)
+                return false;
+        } else if (!dono.equals(other.dono))
+            return false;
+        return true;
+    }
+
     /**
      * Classe interna para controle do grupo.
      * Tem alguns metodos uteis, e o controle do administrador
      */
-    private static class Participante {
+    private class Participante {
 
         private GrupoComponent participante;
-        private boolean eAdmin = false;
+        private boolean eAdmin;
 
         public Participante(GrupoComponent participante) {
             if (participante == null) {
                 // Lançar uma excessão
             }
             this.participante = participante;
+            this.eAdmin = false;
 
         }
 
         public GrupoComponent getParticipante() {
             return participante;
-        }
-
-        public static Participante of(GrupoComponent participante) {
-            return new Participante(participante);
         }
 
         public boolean eAdmin() {
@@ -148,6 +209,32 @@ public class Grupo implements GrupoComponent {
         public boolean eGrupo() {
             return this.participante instanceof Grupo;
         }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((participante == null) ? 0 : participante.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            Participante other = (Participante) obj;
+            if (participante == null) {
+                if (other.participante != null)
+                    return false;
+            } else if (!participante.equals(other.participante))
+                return false;
+            return true;
+        }
+
     }
 
 }

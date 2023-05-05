@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GrupoInterface {
+public class GrupoFachada {
 
     /**
      * Classe estatica para criação de grupos raizes

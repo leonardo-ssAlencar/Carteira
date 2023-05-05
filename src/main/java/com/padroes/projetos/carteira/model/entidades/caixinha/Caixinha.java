@@ -1,11 +1,13 @@
-package com.padroes.projetos.carteira.model.entidades;
+package com.padroes.projetos.carteira.model.entidades.caixinha;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.padroes.projetos.carteira.model.entidades.EstrategiaDevolucao;
+import com.padroes.projetos.carteira.model.entidades.EstrategiaNotificacao;
+import com.padroes.projetos.carteira.model.entidades.TipoLancamento;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
-import com.padroes.projetos.carteira.model.entidades.grupo.GrupoComponent;
 
 public class Caixinha {
 
@@ -15,70 +17,56 @@ public class Caixinha {
     private EstrategiaNotificacao estrategiaNotificacao;
     private Grupo grupo;
     private LocalDate fechamento;
+    private boolean mensal;
     private BigDecimal valorTotal;
 
-    public Caixinha() {
+    protected Caixinha(EstrategiaDevolucao estrategiaDevolucao, List<TipoLancamento> lancamentos,
+            EstrategiaNotificacao estrategiaNotificacao, Grupo grupo, LocalDate fechamento, boolean mensal,
+            BigDecimal valorTotal) {
 
-    }
-
-    public void notificar(GrupoComponent... usuarios) {
-
-    }
-
-    public Long getId() {
-        return id;
+        this.estrategiaDevolucao = estrategiaDevolucao;
+        this.lancamentos = lancamentos;
+        this.estrategiaNotificacao = estrategiaNotificacao;
+        this.grupo = grupo;
+        this.fechamento = fechamento;
+        this.mensal = mensal;
+        this.valorTotal = valorTotal;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public EstrategiaDevolucao getEstrategiaDevolucao() {
-        return estrategiaDevolucao;
+    public Long getId() {
+        return id;
     }
 
-    public void setEstrategiaDevolucao(EstrategiaDevolucao estrategiaDevolucao) {
-        this.estrategiaDevolucao = estrategiaDevolucao;
+    public EstrategiaDevolucao getEstrategiaDevolucao() {
+        return estrategiaDevolucao;
     }
 
     public List<TipoLancamento> getLancamentos() {
         return lancamentos;
     }
 
-    public void setLancamentos(List<TipoLancamento> lancamentos) {
-        this.lancamentos = lancamentos;
-    }
-
     public EstrategiaNotificacao getEstrategiaNotificacao() {
         return estrategiaNotificacao;
-    }
-
-    public void setEstrategiaNotificacao(EstrategiaNotificacao estrategiaNotificacao) {
-        this.estrategiaNotificacao = estrategiaNotificacao;
     }
 
     public Grupo getGrupo() {
         return grupo;
     }
 
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
-    }
-
     public LocalDate getFechamento() {
         return fechamento;
     }
 
-    public void setFechamento(LocalDate fechamento) {
-        this.fechamento = fechamento;
+    public boolean isMensal() {
+        return mensal;
     }
 
     public BigDecimal getValorTotal() {
         return valorTotal;
-    }
-
-    public void setValorTotal(BigDecimal valorTotal) {
-        this.valorTotal = valorTotal;
     }
 
 }

@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import com.padroes.projetos.carteira.model.entidades.Caixinha;
+import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
+import com.padroes.projetos.carteira.model.entidades.excecoes.OperacaoNaoPermitidaException;
 
 // @Entity
-public class Grupo implements GrupoComponent {
+public final class Grupo implements GrupoComponent {
 
     // @Id
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,7 +71,7 @@ public class Grupo implements GrupoComponent {
 
         List<Participante> novoParticipantes = filhos.stream().map(x -> new Participante(x)).toList();
 
-        if (this.parente == GrupoInterface.grupoRaiz) {
+        if (this.parente == GrupoFachada.grupoRaiz) {
             return this.participantes.addAll(novoParticipantes.stream().filter(Participante::eGrupo).toList());
 
         }
@@ -92,7 +93,8 @@ public class Grupo implements GrupoComponent {
                 .filter(x -> x.getParticipante().equals(usuario)).findAny();
 
         if (componente.isEmpty()) {
-            throw new RuntimeException();
+
+            throw new OperacaoNaoPermitidaException("O usuario " + usuario.getNome() + " não está no grupo");
         }
 
         componente.get().eAdmin = true;
@@ -115,9 +117,8 @@ public class Grupo implements GrupoComponent {
     }
 
     private void verificarRaiz() {
-        if (parente == GrupoInterface.grupoRaiz) {
-            // TODO criar uma excessão para isso
-            throw new UnsupportedOperationException();
+        if (parente == GrupoFachada.grupoRaiz) {
+            throw new OperacaoNaoPermitidaException("A operação não pode ser concluida pois já está na raiz ");
         }
     }
 

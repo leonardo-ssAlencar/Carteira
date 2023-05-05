@@ -13,6 +13,11 @@ public interface GrupoComponent {
      */
     public Optional<GrupoComponent> getParente();
 
+    /**
+     * O metodo deve retornar o nome em que o componente foi cadastrado
+     * 
+     * @return String com o nome do componente
+     */
     public String getNome();
 
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 // @Entity
-public class Usuario implements GrupoComponent {
+public final class Usuario implements GrupoComponent {
 
     // @Id
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,6 +85,10 @@ public class Usuario implements GrupoComponent {
 
     public List<Usuario> getDependentes() {
         return dependentes;
+    }
+
+    public void executarLancamento(LancamentoCommand command) {
+        command.execute();
     }
 
     @Override

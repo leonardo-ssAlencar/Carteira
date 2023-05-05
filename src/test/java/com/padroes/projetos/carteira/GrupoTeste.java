@@ -15,16 +15,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.padroes.projetos.carteira.model.entidades.excecoes.OperacaoNaoPermitidaException;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.grupo.GrupoComponent;
-import com.padroes.projetos.carteira.model.entidades.grupo.GrupoInterface;
+import com.padroes.projetos.carteira.model.entidades.grupo.GrupoFachada;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 
 @SpringBootTest
 public class GrupoTeste {
 
     @Autowired // Injeta a dependencia, o mesmo que fazer new GrupoInterface();
-    GrupoInterface grupoInterface;
+    GrupoFachada grupoInterface;
 
     Usuario user1;
     Grupo grupo;
@@ -40,12 +41,12 @@ public class GrupoTeste {
         // grupo = grupoInterface.criarGrupoUsuario(user1);
 
         assertEquals(user1.getNome(), grupo.getNome(), "O nome do grupo é diferente do nome do usuario");
-        assertEquals(GrupoInterface.grupoRaiz, grupo.getParente().get(), "O grupo não tem o grupoRaiz como pai");
+        assertEquals(GrupoFachada.grupoRaiz, grupo.getParente().get(), "O grupo não tem o grupoRaiz como pai");
         assertEquals(user1, grupo.getDono(), "O grupo não recebeu como o dono o Usuario passado!");
 
         Usuario usuario = new Usuario("aaa", "null", "null", "ull");
 
-        assertThrows(UnsupportedOperationException.class, () -> grupo.setParticipantes(usuario),
+        assertThrows(OperacaoNaoPermitidaException.class, () -> grupo.setParticipantes(usuario),
                 "usuario foi adicionado a um grupo root");
 
     }
@@ -109,7 +110,7 @@ public class GrupoTeste {
 
         Usuario naoVaiTaNoGrup = new Usuario("naoVai", "775555555", "naoVai@carteira.com", "1223");
 
-        assertThrows(RuntimeException.class, () -> grupo1.tornarAdmin(naoVaiTaNoGrup),
+        assertThrows(OperacaoNaoPermitidaException.class, () -> grupo1.tornarAdmin(naoVaiTaNoGrup),
                 "Usuario que não está no grupo não pode ser administrador ");
 
         assertFalse(() -> grupo1.setParticipantes(novoAdmin), "Foi adicionado dois");

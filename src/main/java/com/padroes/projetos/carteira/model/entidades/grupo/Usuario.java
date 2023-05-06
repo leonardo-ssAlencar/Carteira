@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import com.padroes.projetos.carteira.model.entidades.grupo.comandos.LancamentoCommand;
+
 // @Entity
 public final class Usuario implements GrupoComponent {
 
@@ -87,8 +89,12 @@ public final class Usuario implements GrupoComponent {
         return dependentes;
     }
 
-    public void executarLancamento(LancamentoCommand command) {
-        command.execute();
+    public void executarLancamento(LancamentoCommand comando, Grupo grupo) {
+        comando.setUsuario(this);
+        comando.setCaixinha(grupo.getCaixinha());
+
+        comando.executar();
+
     }
 
     @Override

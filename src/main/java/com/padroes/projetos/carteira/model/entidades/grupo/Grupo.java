@@ -9,20 +9,16 @@ import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 import com.padroes.projetos.carteira.model.entidades.excecoes.OperacaoNaoPermitidaException;
 
 // @Entity
-public final class Grupo implements GrupoComponent {
+public final class Grupo extends GrupoComponent {
 
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    // Nome do grupo
-    private String nome;
-    // O grupo que contém este grupo
-    private GrupoComponent parente;
     // O dono do grupo, normalmente quem o criou
+    // @OneToOne
     private GrupoComponent dono;
     // Lista dos participantes do grupo
+    // @OneToMany
     private Set<Participante> participantes = new HashSet<>();
     // A Caixinha do grupo
+    // @OneToOne
     private Caixinha caixinha;
 
     public Grupo() {
@@ -30,18 +26,9 @@ public final class Grupo implements GrupoComponent {
     }
 
     public Grupo(String nome, GrupoComponent parente, GrupoComponent dono, Caixinha caixinha) {
-        this.nome = nome;
-        this.parente = parente;
+        super(nome, parente);
         this.dono = dono;
 
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setParente(GrupoComponent parente) {
-        this.parente = parente;
     }
 
     public GrupoComponent getDono() {
@@ -123,8 +110,8 @@ public final class Grupo implements GrupoComponent {
     }
 
     @Override
-    public Optional<GrupoComponent> getParente() {
-        return Optional.of(this.parente);
+    public GrupoComponent getParente() {
+        return this.parente;
 
     }
 
@@ -135,7 +122,8 @@ public final class Grupo implements GrupoComponent {
 
     @Override
     public String toString() {
-        return "Grupo [id=" + id + ", nome=" + nome + ", parente=" + parente.getNome() + ", dono=" + dono.getNome()
+        return "Grupo [id=" + super.getId() + ", nome=" + nome + ", parente=" + parente.getNome() + ", dono="
+                + dono.getNome()
                 + ", caixinha="
                 + caixinha + "]";
     }
@@ -181,8 +169,10 @@ public final class Grupo implements GrupoComponent {
      * Classe interna para controle do grupo.
      * Tem alguns metodos uteis, e o controle do administrador
      */
+
     private class Participante {
 
+        // @OneToOne
         private GrupoComponent participante;
         private boolean eAdmin;
 

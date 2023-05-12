@@ -41,7 +41,7 @@ public class GrupoTeste {
         // grupo = grupoInterface.criarGrupoUsuario(user1);
 
         assertEquals(user1.getNome(), grupo.getNome(), "O nome do grupo é diferente do nome do usuario");
-        assertEquals(GrupoFachada.grupoRaiz, grupo.getParente().get(), "O grupo não tem o grupoRaiz como pai");
+        assertEquals(GrupoFachada.grupoRaiz, grupo.getParente(), "O grupo não tem o grupoRaiz como pai");
         assertEquals(user1, grupo.getDono(), "O grupo não recebeu como o dono o Usuario passado!");
 
         Usuario usuario = new Usuario("aaa", "null", "null", "ull");
@@ -62,8 +62,8 @@ public class GrupoTeste {
 
         Grupo grupoTeste = grupoInterface.criarGrupoUsuario(usuario);
 
-        assertTrue(usuario.getParente().isPresent(), "O parente não foi adicionado");
-        assertEquals(grupoTeste, usuario.getParente().get(), "O grupo pai é diferente do esperado");
+        assertNotNull(usuario.getParente(), "O parente não foi adicionado");
+        assertEquals(grupoTeste, usuario.getParente(), "O grupo pai é diferente do esperado");
 
         assertEquals(nome, usuario.getNome());
         assertEquals(emai, usuario.getEmail());
@@ -80,7 +80,7 @@ public class GrupoTeste {
         assertNotNull(grupo1, "O grupo não foi criado");
 
         assertEquals(nomeGrupo, grupo1.getNome(), "O nome do grupo é diferente do esperado");
-        assertEquals(grupo, grupo1.getParente().get(), "O grupo não tem o pai esperado");
+        assertEquals(grupo, grupo1.getParente(), "O grupo não tem o pai esperado");
         assertEquals(user1, grupo1.getDono(), "O grupo não recebeu como o dono o Usuario passado!");
 
         List<GrupoComponent> participantes = Arrays.asList(
@@ -125,15 +125,15 @@ public class GrupoTeste {
     public void subGrupos() {
 
         String nomeGrupo = "Familia";
-        Grupo subgrupo = grupoInterface.criarSubGrupo(nomeGrupo, grupo);
+        Grupo subgrupo = grupoInterface.criarGrupo(nomeGrupo, grupo);
 
         assertEquals(nomeGrupo, subgrupo.getNome(), "O nome não foi adicionado da" +
                 "forma esperada");
 
         assertEquals(grupo, subgrupo.getDono(), "O dono não foi especificado da forma esperada");
         assertTrue(grupo.getParticipantes().contains(subgrupo), "O subgrupo não foi cadastrado");
-        assertTrue(subgrupo.getParente().isPresent(), "O grupo pai não foi cadastrado");
-        assertEquals(grupo, subgrupo.getParente().get(), "O grupo parente está errado");
+        assertNotNull(subgrupo.getParente(), "O grupo pai não foi cadastrado");
+        assertEquals(grupo, subgrupo.getParente(), "O grupo parente está errado");
 
         assertEquals(grupo.getAdministradores(), subgrupo.getAdministradores(),
                 "Os administradores não foram cadastrados");

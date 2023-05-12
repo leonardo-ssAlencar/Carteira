@@ -1,8 +1,28 @@
 package com.padroes.projetos.carteira.model.entidades.grupo;
 
-import java.util.Optional;
+// @Entity
+// @Inheritance(strategy = InheritanceType.JOINED)
+public abstract class GrupoComponent {
 
-public interface GrupoComponent {
+    protected Long id;
+    protected String nome;
+    protected GrupoComponent parente;
+
+    public GrupoComponent(String nome, GrupoComponent parente) {
+        this.nome = nome;
+        this.parente = parente;
+    }
+
+    public GrupoComponent() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     /**
      * O metodo deve retornar o objeto que contem o objeto que chamou o metodo. No
@@ -11,13 +31,17 @@ public interface GrupoComponent {
      * 
      * @return Optional<GrupoComponent> parente
      */
-    public Optional<GrupoComponent> getParente();
+    public GrupoComponent getParente() {
+        return this.parente;
+    }
 
     /**
      * O metodo deve retornar o nome em que o componente foi cadastrado
      * 
      * @return String com o nome do componente
      */
-    public String getNome();
+    public String getNome() {
+        return this.nome;
+    }
 
 }

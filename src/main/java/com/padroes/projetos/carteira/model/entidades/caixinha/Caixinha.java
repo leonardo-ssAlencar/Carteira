@@ -5,33 +5,31 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.padroes.projetos.carteira.model.entidades.EstornoEstrategy;
 import com.padroes.projetos.carteira.model.entidades.Item;
-import com.padroes.projetos.carteira.model.entidades.Notificador;
-import com.padroes.projetos.carteira.model.entidades.excecoes.OperacaoNaoPermitidaException;
+import com.padroes.projetos.carteira.model.entidades.LancamentoEstrategy;
+import com.padroes.projetos.carteira.model.entidades.commands.LancamentoCommand;
+import com.padroes.projetos.carteira.model.entidades.enuns.TipoLancamento;
+import com.padroes.projetos.carteira.model.entidades.estorno.EstrategiaEstorno;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
-import com.padroes.projetos.carteira.model.entidades.grupo.comandos.LancamentoCommand;
-import com.padroes.projetos.carteira.model.entidades.grupo.enums.CamposEnum;
-import com.padroes.projetos.carteira.model.entidades.grupo.enums.TipoLancamentoEnum;
 import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
-import com.padroes.projetos.carteira.model.entidades.lancamento.LancamentoEstrategy;
+import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotificacao;
 
 public class Caixinha {
 
     protected Grupo grupo;
     protected LancamentoEstrategy lancamentoEstrategy;
     protected List<Lancamento> lancamentos = new ArrayList<>();
-    protected List<TipoLancamentoEnum> proibidos;
+    protected List<TipoLancamento> proibidos;
     protected List<Item> itens;
-    protected Notificador notificador;
-    protected EstornoEstrategy estorno;
+    protected EstrategiaNotificacao notificador;
+    protected EstrategiaEstorno estorno;
     protected BigDecimal valorTotal;
     protected BigDecimal meta;
     protected LocalDate fechamento;
     protected boolean mensal;
 
-    protected Caixinha(Grupo grupo, List<TipoLancamentoEnum> permitidos, List<Item> itens,
-            Notificador notificador, EstornoEstrategy estorno, BigDecimal valorTotal, BigDecimal meta,
+    protected Caixinha(Grupo grupo, List<TipoLancamento> permitidos, List<Item> itens,
+            EstrategiaNotificacao notificador, EstrategiaEstorno estorno, BigDecimal valorTotal, BigDecimal meta,
             LocalDate fechamento, boolean mensal, LancamentoEstrategy lancamentoEstrategy) {
         this.grupo = grupo;
 
@@ -50,13 +48,9 @@ public class Caixinha {
 
     }
 
-    public void processarLancamento(LancamentoCommand command) {
+    public void fazerLancamento(LancamentoCommand comando) {
 
-        if (proibidos != null)
-            if (proibidos.contains(command.getMessage().get(CamposEnum.TIPO)))
-                throw new OperacaoNaoPermitidaException("A caixinha não permite esse tipo de lancamento");
-
-        lancamentos.add(lancamentoEstrategy.processarLancamento(this, command));
+        lancamentos.add(lancamentoEstrategy.executar(this, comando));
 
     }
 

@@ -1,7 +1,5 @@
 package com.padroes.projetos.carteira.model.entidades.grupo;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +15,9 @@ public class GrupoFachada {
         }
 
         @Override
-        public Optional<GrupoComponent> getParente() {
-            return Optional.empty();
+        public GrupoComponent getParente() {
+            return this;
+
         }
 
     };
@@ -34,8 +33,8 @@ public class GrupoFachada {
     public Grupo criarGrupoUsuario(Usuario usuario) {
 
         Grupo grupo = new Grupo();
-        grupo.setParente(grupoRaiz);
-        grupo.setNome(usuario.getNome());
+        grupo.parente = grupoRaiz;
+        grupo.nome = usuario.getNome();
         grupo.setDono(usuario);
         usuario.setParente(grupo);
 
@@ -52,11 +51,11 @@ public class GrupoFachada {
     public Grupo criarGrupo(String nome, Usuario dono) {
         Grupo grupo = new Grupo();
         grupo.setDono(dono);
-        grupo.setNome(nome);
-        grupo.setParente(dono.getParente().get());
+        grupo.nome = nome;
+        grupo.parente = (dono.getParente());
         grupo.setParticipantes(dono);
 
-        Grupo rootGrupo = (Grupo) dono.getParente().get();
+        Grupo rootGrupo = (Grupo) dono.getParente();
         rootGrupo.setParticipantes(grupo);
         grupo.tornarAdmin((Usuario) dono);
 
@@ -64,12 +63,12 @@ public class GrupoFachada {
 
     }
 
-    public Grupo criarSubGrupo(String nome, Grupo pai) {
+    public Grupo criarGrupo(String nome, Grupo pai) {
         Grupo grupo = new Grupo();
 
-        grupo.setNome(nome);
+        grupo.nome = (nome);
         grupo.setDono(pai);
-        grupo.setParente(pai);
+        grupo.parente = (pai);
         pai.setParticipantes(grupo);
 
         return grupo;

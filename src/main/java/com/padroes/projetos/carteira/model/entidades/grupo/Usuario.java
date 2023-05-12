@@ -1,23 +1,11 @@
 package com.padroes.projetos.carteira.model.entidades.grupo;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
-import com.padroes.projetos.carteira.model.entidades.grupo.comandos.LancamentoCommand;
-
 // @Entity
-public final class Usuario implements GrupoComponent {
+public final class Usuario extends GrupoComponent {
 
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nome;
     private String telefone;
     private String email;
     private String senha;
-    private GrupoComponent parente;
-    private List<Usuario> dependentes;
 
     public Usuario() {
     }
@@ -70,31 +58,12 @@ public final class Usuario implements GrupoComponent {
     }
 
     @Override
-    public Optional<GrupoComponent> getParente() {
-        return Optional.of(parente);
+    public GrupoComponent getParente() {
+        return parente;
     }
 
     public void setParente(Grupo parente) {
         this.parente = parente;
-    }
-
-    public void setDependente(Usuario dependentes) {
-        if (this.dependentes == null) {
-            this.dependentes = new LinkedList<>();
-        }
-        this.dependentes.add(dependentes);
-    }
-
-    public List<Usuario> getDependentes() {
-        return dependentes;
-    }
-
-    public void executarLancamento(LancamentoCommand comando, Grupo grupo) {
-        comando.setUsuario(this);
-        comando.setCaixinha(grupo.getCaixinha());
-
-        comando.executar();
-
     }
 
     @Override

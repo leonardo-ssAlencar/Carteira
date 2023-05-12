@@ -2,55 +2,52 @@ package com.padroes.projetos.carteira.model.entidades.caixinha;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Arrays;
 import java.util.List;
 
-import com.padroes.projetos.carteira.model.entidades.EstornoEstrategy;
-import com.padroes.projetos.carteira.model.entidades.Item;
-import com.padroes.projetos.carteira.model.entidades.Notificador;
-import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
-import com.padroes.projetos.carteira.model.entidades.grupo.enums.TipoLancamentoEnum;
-import com.padroes.projetos.carteira.model.entidades.lancamento.LancamentoEstrategy;
+import org.springframework.stereotype.Service;
 
+import com.padroes.projetos.carteira.model.entidades.Item;
+import com.padroes.projetos.carteira.model.entidades.LancamentoEstrategy;
+import com.padroes.projetos.carteira.model.entidades.enuns.TipoLancamento;
+import com.padroes.projetos.carteira.model.entidades.estorno.EstrategiaEstorno;
+import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
+import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotificacao;
+
+@Service
 public class CaixinhaBuilder {
 
-    protected Grupo grupo;
-    protected List<TipoLancamentoEnum> permitidos;
+    protected List<TipoLancamento> proibidos;
     protected LancamentoEstrategy lancamentoEstrategy;
     protected List<Item> itens;
-    protected Notificador notificador;
-    protected EstornoEstrategy estorno;
+    protected EstrategiaNotificacao notificador;
+    protected EstrategiaEstorno estorno;
     protected BigDecimal valorTotal;
     protected BigDecimal meta;
     protected LocalDate fechamento;
     protected boolean mensal;
 
-    public CaixinhaBuilder(Grupo grupo) {
+    public CaixinhaBuilder() {
         valorTotal = new BigDecimal(0);
-        LocalDate hoje = LocalDate.now();
-        int diasDoMes = hoje.lengthOfMonth();
-        int diaHoje = hoje.getDayOfMonth();
-        fechamento = hoje.plusDays(diasDoMes - diaHoje);
+        fechamento = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
         mensal = false;
 
     }
 
-    public static CaixinhaBuilder caixinhaBuilder(Grupo grupo) {
-        return new CaixinhaBuilder(grupo);
-    }
-
-    public CaixinhaBuilder lancamentosPermitidos(List<TipoLancamentoEnum> lancamentos) {
-        this.permitidos = lancamentos;
+    public CaixinhaBuilder proibirTiposLancamentos(TipoLancamento... lancamentos) {
+        proibidos.addAll(Arrays.asList(lancamentos));
 
         return this;
     }
 
-    public CaixinhaBuilder notificador(Notificador notificador) {
+    public CaixinhaBuilder notificador(EstrategiaNotificacao notificador) {
         this.notificador = notificador;
 
         return this;
     }
 
-    public CaixinhaBuilder estorno(EstornoEstrategy estrategy) {
+    public CaixinhaBuilder estorno(EstrategiaEstorno estrategy) {
         this.estorno = estrategy;
 
         return this;
@@ -91,9 +88,9 @@ public class CaixinhaBuilder {
 
     }
 
-    public Caixinha build() {
+    public Caixinha build(Grupo grupo) {
 
-        return new Caixinha(grupo, permitidos, itens, notificador, estorno, valorTotal, meta, fechamento, mensal,
+        return new Caixinha(grupo, proibidos, itens, notificador, estorno, valorTotal, meta, fechamento, mensal,
                 lancamentoEstrategy);
 
     }

@@ -7,22 +7,21 @@ import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 
 public abstract class Lancamento {
 
-    private Long id;
-    private Usuario usuario;
-    private String mensagem;
-    private BigDecimal valor;
-    private Operacao operacao;
-    private LocalDateTime dataHoraLancamento;
+    protected Long id;
+    protected Usuario usuario;
+    protected String mensagem;
+    protected BigDecimal valor;
+    protected Operacao operacao;
+    protected LocalDateTime dataHoraLancamento;
 
     public Lancamento() {
     }
 
-    public Lancamento(Usuario usuario, String mensagem, BigDecimal valor, Operacao operacao,
+    public Lancamento(Usuario usuario, String mensagem, Operacao operacao,
             LocalDateTime dataHoraLancamento) {
         this.dataHoraLancamento = dataHoraLancamento;
         this.usuario = usuario;
         this.mensagem = mensagem;
-        this.valor = valor;
         this.operacao = operacao;
     }
 
@@ -56,6 +55,10 @@ public abstract class Lancamento {
 
     public void setDataHoraLancamento(LocalDateTime dataHoraLancamento) {
         this.dataHoraLancamento = dataHoraLancamento;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 
 }

@@ -6,16 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.padroes.projetos.carteira.model.entidades.Item;
-import com.padroes.projetos.carteira.model.entidades.LancamentoEstrategy;
 import com.padroes.projetos.carteira.model.entidades.commands.LancamentoCommand;
 import com.padroes.projetos.carteira.model.entidades.enuns.TipoLancamento;
-import com.padroes.projetos.carteira.model.entidades.estorno.EstrategiaEstorno;
+import com.padroes.projetos.carteira.model.entidades.estrategiaEstorno.EstrategiaEstorno;
+import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.LancamentoEstrategy;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
 import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotificacao;
 
 public class Caixinha {
 
+    private Long id;
     protected Grupo grupo;
     protected LancamentoEstrategy lancamentoEstrategy;
     protected List<Lancamento> lancamentos = new ArrayList<>();
@@ -48,10 +49,70 @@ public class Caixinha {
 
     }
 
-    public void fazerLancamento(LancamentoCommand comando) {
+    public void executarLancamento(LancamentoCommand command) {
+        Lancamento lancamento = lancamentoEstrategy.executar(this, command);
+        lancamentos.add(lancamento);
+    }
 
-        lancamentos.add(lancamentoEstrategy.executar(this, comando));
+    public void notificar(String mensagem) {
+        this.notificador.notificar(mensagem);
 
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public LancamentoEstrategy getLancamentoEstrategy() {
+        return lancamentoEstrategy;
+    }
+
+    public List<Lancamento> getLancamentos() {
+        return lancamentos;
+    }
+
+    public List<TipoLancamento> getProibidos() {
+        return proibidos;
+    }
+
+    public List<Item> getItens() {
+        return itens;
+    }
+
+    public EstrategiaNotificacao getNotificador() {
+        return notificador;
+    }
+
+    public EstrategiaEstorno getEstorno() {
+        return estorno;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public BigDecimal getMeta() {
+        return meta;
+    }
+
+    public LocalDate getFechamento() {
+        return fechamento;
+    }
+
+    public boolean isMensal() {
+        return mensal;
     }
 
 }

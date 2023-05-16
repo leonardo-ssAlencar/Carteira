@@ -9,9 +9,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.padroes.projetos.carteira.model.entidades.Item;
-import com.padroes.projetos.carteira.model.entidades.LancamentoEstrategy;
 import com.padroes.projetos.carteira.model.entidades.enuns.TipoLancamento;
-import com.padroes.projetos.carteira.model.entidades.estorno.EstrategiaEstorno;
+import com.padroes.projetos.carteira.model.entidades.estrategiaEstorno.EstrategiaEstorno;
+import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.EstrategiaSimples;
+import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.LancamentoEstrategy;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotificacao;
 
@@ -19,10 +20,10 @@ import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotif
 public class CaixinhaBuilder {
 
     protected List<TipoLancamento> proibidos;
-    protected LancamentoEstrategy lancamentoEstrategy;
     protected List<Item> itens;
     protected EstrategiaNotificacao notificador;
     protected EstrategiaEstorno estorno;
+    protected LancamentoEstrategy lancamentoEstrategy;
     protected BigDecimal valorTotal;
     protected BigDecimal meta;
     protected LocalDate fechamento;
@@ -32,6 +33,8 @@ public class CaixinhaBuilder {
         valorTotal = new BigDecimal(0);
         fechamento = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
         mensal = false;
+        meta = null;
+        lancamentoEstrategy = new EstrategiaSimples();
 
     }
 

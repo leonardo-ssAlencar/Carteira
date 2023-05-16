@@ -63,16 +63,4 @@ public class GrupoFachada {
 
     }
 
-    public Grupo criarGrupo(String nome, Grupo pai) {
-        Grupo grupo = new Grupo();
-
-        grupo.nome = (nome);
-        grupo.setDono(pai);
-        grupo.parente = (pai);
-        pai.setParticipantes(grupo);
-
-        return grupo;
-
-    }
-
 }

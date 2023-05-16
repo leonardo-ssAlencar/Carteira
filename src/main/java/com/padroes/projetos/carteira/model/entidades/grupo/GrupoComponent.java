@@ -1,11 +1,22 @@
 package com.padroes.projetos.carteira.model.entidades.grupo;
 
-// @Entity
-// @Inheritance(strategy = InheritanceType.JOINED)
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToOne;
+
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class GrupoComponent {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
     protected String nome;
+    @OneToOne
     protected GrupoComponent parente;
 
     public GrupoComponent(String nome, GrupoComponent parente) {
@@ -29,7 +40,7 @@ public abstract class GrupoComponent {
      * caso de um usuario deve retornar o grupo raiz dele, no caso de um subGrupo
      * deve retornar o grupo pai dele
      * 
-     * @return Optional<GrupoComponent> parente
+     * @return GrupoComponent parente
      */
     public GrupoComponent getParente() {
         return this.parente;

@@ -8,17 +8,21 @@ import java.util.Set;
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 import com.padroes.projetos.carteira.model.entidades.excecoes.OperacaoNaoPermitidaException;
 
-// @Entity
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+
+@Entity
 public final class Grupo extends GrupoComponent {
 
     // O dono do grupo, normalmente quem o criou
-    // @OneToOne
+    @OneToOne
     private GrupoComponent dono;
     // Lista dos participantes do grupo
-    // @OneToMany
+    @OneToMany
     private Set<Participante> participantes = new HashSet<>();
     // A Caixinha do grupo
-    // @OneToOne
+    @OneToOne
     private Caixinha caixinha;
 
     public Grupo() {
@@ -88,15 +92,12 @@ public final class Grupo extends GrupoComponent {
 
     }
 
+    public List<Usuario> getUsuarios() {
+        return participantes.stream().filter(Participante::eUsuario).map(x -> (Usuario) x.getParticipante()).toList();
+
+    }
+
     public List<Usuario> getAdministradores() {
-
-        Set<Usuario> user = new HashSet<>();
-        if (this.dono instanceof Grupo) {
-            Grupo grupo = (Grupo) this.dono;
-
-            user.addAll(grupo.getAdministradores());
-
-        }
 
         return participantes.stream().filter(Participante::eUsuario).filter(Participante::eAdmin)
                 .map(x -> (Usuario) x.getParticipante()).toList();
@@ -172,7 +173,7 @@ public final class Grupo extends GrupoComponent {
 
     private class Participante {
 
-        // @OneToOne
+        @OneToOne
         private GrupoComponent participante;
         private boolean eAdmin;
 

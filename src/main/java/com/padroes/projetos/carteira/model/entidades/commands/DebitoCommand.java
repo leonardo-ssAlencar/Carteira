@@ -2,22 +2,30 @@ package com.padroes.projetos.carteira.model.entidades.commands;
 
 import java.math.BigDecimal;
 
-import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
+import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 import com.padroes.projetos.carteira.model.entidades.lancamento.Debito;
+import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
+import com.padroes.projetos.carteira.model.entidades.lancamento.LancamentoFactory;
 
 public class DebitoCommand extends LancamentoCommand {
 
-    public DebitoCommand(Usuario user, Caixinha caixinha, BigDecimal valor) {
-        super(user, caixinha, valor);
-        this.operacao = new Debito();
+    private Lancamento lancamento;
+
+    public DebitoCommand(Grupo grupo, BigDecimal valor, Usuario user, String descricao, LancamentoFactory factory) {
+        super(grupo);
+        this.lancamento = factory.criarLancamento(user, valor, descricao, new Debito(valor));
 
     }
 
     @Override
     public void executar() {
-        caixinha.fazerLancamento(this);
+        getGrupo().getCaixinha().executarLancamento(this);
+    }
 
+    @Override
+    public Lancamento getLancamento() {
+        return this.lancamento;
     }
 
 }

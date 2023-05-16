@@ -121,23 +121,25 @@ public class GrupoTeste {
 
     }
 
-    @Test
-    public void subGrupos() {
+    // @Test
+    // public void subGrupos() {
 
-        String nomeGrupo = "Familia";
-        Grupo subgrupo = grupoInterface.criarGrupo(nomeGrupo, grupo);
+    // String nomeGrupo = "Familia";
+    // Grupo subgrupo = grupoInterface.criarGrupo(nomeGrupo, grupo);
 
-        assertEquals(nomeGrupo, subgrupo.getNome(), "O nome não foi adicionado da" +
-                "forma esperada");
+    // assertEquals(nomeGrupo, subgrupo.getNome(), "O nome não foi adicionado da" +
+    // "forma esperada");
 
-        assertEquals(grupo, subgrupo.getDono(), "O dono não foi especificado da forma esperada");
-        assertTrue(grupo.getParticipantes().contains(subgrupo), "O subgrupo não foi cadastrado");
-        assertNotNull(subgrupo.getParente(), "O grupo pai não foi cadastrado");
-        assertEquals(grupo, subgrupo.getParente(), "O grupo parente está errado");
+    // assertEquals(grupo, subgrupo.getDono(), "O dono não foi especificado da forma
+    // esperada");
+    // assertTrue(grupo.getParticipantes().contains(subgrupo), "O subgrupo não foi
+    // cadastrado");
+    // assertNotNull(subgrupo.getParente(), "O grupo pai não foi cadastrado");
+    // assertEquals(grupo, subgrupo.getParente(), "O grupo parente está errado");
 
-        assertEquals(grupo.getAdministradores(), subgrupo.getAdministradores(),
-                "Os administradores não foram cadastrados");
+    // assertEquals(grupo.getAdministradores(), subgrupo.getAdministradores(),
+    // "Os administradores não foram cadastrados");
 
-    }
+    // }
 
 }

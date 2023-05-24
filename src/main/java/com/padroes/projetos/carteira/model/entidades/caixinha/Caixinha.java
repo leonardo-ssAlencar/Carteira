@@ -55,8 +55,12 @@ public class Caixinha {
     }
 
     public void notificar(String mensagem) {
-        this.notificador.notificar(mensagem);
+        this.notificador.notificar(mensagem, this);
 
+    }
+
+    public void realizarEstorno() {
+        this.estorno.calcularExtorno(this);
     }
 
     public void setId(Long id) {
@@ -89,6 +93,11 @@ public class Caixinha {
 
     public List<Item> getItens() {
         return itens;
+    }
+
+    public void addItems(List<Item> items) {
+        this.itens.addAll(items);
+
     }
 
     public EstrategiaNotificacao getNotificador() {

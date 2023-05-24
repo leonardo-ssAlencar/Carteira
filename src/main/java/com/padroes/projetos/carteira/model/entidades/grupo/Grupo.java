@@ -5,10 +5,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.padroes.projetos.carteira.model.entidades.Mensagens;
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 import com.padroes.projetos.carteira.model.entidades.excecoes.OperacaoNaoPermitidaException;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -17,9 +22,9 @@ public final class Grupo extends GrupoComponent {
 
     // O dono do grupo, normalmente quem o criou
     @OneToOne
-    private GrupoComponent dono;
+    private Usuario dono;
     // Lista dos participantes do grupo
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<Participante> participantes = new HashSet<>();
     // A Caixinha do grupo
     @OneToOne
@@ -31,7 +36,27 @@ public final class Grupo extends GrupoComponent {
 
     public Grupo(String nome, GrupoComponent parente, GrupoComponent dono, Caixinha caixinha) {
         super(nome, parente);
-        this.dono = dono;
+        setDono(dono);
+
+    }
+
+    @Override
+    public void notificar(Mensagens msg) {
+        this.participantes.stream().filter(Participante::eUsuario).map(x -> (Usuario) x.getParticipante())
+                .forEach(x -> x.notificar(msg));
+
+    }
+
+    public void notificar(Mensagens mensagen, Usuario user) {
+        Optional<Usuario> usuarioGrupo = this.participantes.stream().filter(Participante::eUsuario)
+                .map(x -> (Usuario) x.getParticipante())
+                .filter(x -> x.equals(user)).findFirst();
+
+        if (usuarioGrupo.isPresent()) {
+            usuarioGrupo.get().notificar(mensagen);
+        } else {
+            // TODO CRIAR UMA EXCESSÃO
+        }
 
     }
 
@@ -40,7 +65,11 @@ public final class Grupo extends GrupoComponent {
     }
 
     public void setDono(GrupoComponent dono) {
-        this.dono = dono;
+        if (dono instanceof Grupo) {
+            Grupo grupoTemp = (Grupo) dono;
+            dono = grupoTemp.getDono();
+        }
+        this.dono = (Usuario) dono;
     }
 
     public List<GrupoComponent> getParticipantes() {
@@ -171,9 +200,13 @@ public final class Grupo extends GrupoComponent {
      * Tem alguns metodos uteis, e o controle do administrador
      */
 
+    @Entity
     private class Participante {
 
-        @OneToOne
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+        @OneToOne(fetch = FetchType.LAZY)
         private GrupoComponent participante;
         private boolean eAdmin;
 
@@ -206,6 +239,7 @@ public final class Grupo extends GrupoComponent {
         public int hashCode() {
             final int prime = 31;
             int result = 1;
+            result = prime * result + getEnclosingInstance().hashCode();
             result = prime * result + ((participante == null) ? 0 : participante.hashCode());
             return result;
         }
@@ -219,12 +253,18 @@ public final class Grupo extends GrupoComponent {
             if (getClass() != obj.getClass())
                 return false;
             Participante other = (Participante) obj;
+            if (!getEnclosingInstance().equals(other.getEnclosingInstance()))
+                return false;
             if (participante == null) {
                 if (other.participante != null)
                     return false;
             } else if (!participante.equals(other.participante))
                 return false;
             return true;
+        }
+
+        private Grupo getEnclosingInstance() {
+            return Grupo.this;
         }
 
     }

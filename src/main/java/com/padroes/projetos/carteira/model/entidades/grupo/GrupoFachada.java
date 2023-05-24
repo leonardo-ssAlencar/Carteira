@@ -2,6 +2,8 @@ package com.padroes.projetos.carteira.model.entidades.grupo;
 
 import org.springframework.stereotype.Service;
 
+import com.padroes.projetos.carteira.model.entidades.Mensagens;
+
 @Service
 public class GrupoFachada {
 
@@ -19,6 +21,9 @@ public class GrupoFachada {
             return this;
 
         }
+
+        public void notificar(Mensagens msg) {
+        };
 
     };
 

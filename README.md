@@ -8,3 +8,12 @@ O projeto tem como objetivo compor a nota e aplicar os conhecimentos adquiridos 
 
 O projeto tem como objetivo criar um sistema para organizar as finanças de um grupo de pessoas.
 
+
+## Tecnologias ultilizadas
+
+- spring boot
+- Spring web
+- Thymeleaf
+- spring data jpa
+- hibernate
+- mysql

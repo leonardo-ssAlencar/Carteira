@@ -14,7 +14,8 @@ public class EstornoSimples implements EstrategiaEstorno {
 
         valorTotal = valorTotal.divide(new BigDecimal(usuarios));
 
-        caixinha.notificar("O valor da caixinha para cada um no mês " + LocalDate.now().getMonth() + " foi de "
+        caixinha.notificar("O valor da caixinha " + caixinha.getGrupo().getNome() + " para cada um no mês "
+                + LocalDate.now().getMonth() + " foi de "
                 + valorTotal + " R$");
 
     }

@@ -4,8 +4,15 @@ import java.math.BigDecimal;
 
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 
-public class Credito implements Operacao {
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 
+@Entity
+@DiscriminatorValue("CRED")
+public class Credito extends Operacao {
+
+    @Transient
     private BigDecimal valor;
 
     public Credito(BigDecimal valor) {

@@ -17,3 +17,18 @@ O projeto tem como objetivo criar um sistema para organizar as finanças de um g
 - spring data jpa
 - hibernate
 - mysql
+
+
+<br>
+
+## Diagrama UML
+
+![Diagrama](./diagramas/diagrama_Classe.jpg)
+
+
+    O diagrama vai ser explicado com mais detalhes dentro dos pacotes refentes.
+<br>
+
+## Diagrama de casos de Uso
+
+![Diagrama de casod de uso](./diagramas/caso_de_uso.jpg)

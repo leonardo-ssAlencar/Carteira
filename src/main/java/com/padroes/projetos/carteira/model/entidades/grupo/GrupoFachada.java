@@ -56,7 +56,7 @@ public class GrupoFachada {
     public Grupo criarGrupo(String nome, Usuario dono) {
         Grupo grupo = new Grupo();
         grupo.setDono(dono);
-        grupo.nome = nome;
+        grupo.setNome(nome);
         grupo.parente = (dono.getParente());
         grupo.setParticipantes(dono);
 

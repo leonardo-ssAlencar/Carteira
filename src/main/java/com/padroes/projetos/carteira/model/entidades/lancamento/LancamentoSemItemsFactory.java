@@ -9,7 +9,7 @@ public class LancamentoSemItemsFactory implements LancamentoFactory {
     private Lancamento lancamento;
 
     public LancamentoSemItemsFactory() {
-        lancamento = new LancamentoSemItems();
+        lancamento = new Lancamento();
 
     }
 

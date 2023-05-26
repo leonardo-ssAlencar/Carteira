@@ -2,12 +2,23 @@ package com.padroes.projetos.carteira.model.entidades;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Mensagens {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String mensagem;
     private LocalDateTime dataHoraEnvio;
     private boolean lida;
+
+    public Mensagens() {
+    }
 
     public Mensagens(String msg) {
         this.mensagem = msg;

@@ -11,9 +11,6 @@ import com.padroes.projetos.carteira.model.entidades.excecoes.OperacaoNaoPermiti
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -24,7 +21,7 @@ public final class Grupo extends GrupoComponent {
     @OneToOne
     private Usuario dono;
     // Lista dos participantes do grupo
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "grupo")
     private Set<Participante> participantes = new HashSet<>();
     // A Caixinha do grupo
     @OneToOne
@@ -40,7 +37,7 @@ public final class Grupo extends GrupoComponent {
 
     }
 
-    @Override
+    // @Override
     public void notificar(Mensagens msg) {
         this.participantes.stream().filter(Participante::eUsuario).map(x -> (Usuario) x.getParticipante())
                 .forEach(x -> x.notificar(msg));
@@ -85,20 +82,6 @@ public final class Grupo extends GrupoComponent {
 
     }
 
-    public boolean setParticipantes(List<? extends GrupoComponent> filhos) {
-        if (parente instanceof Usuario)
-            verificarRaiz();
-
-        List<Participante> novoParticipantes = filhos.stream().map(x -> new Participante(x)).toList();
-
-        if (this.parente == GrupoFachada.grupoRaiz) {
-            return this.participantes.addAll(novoParticipantes.stream().filter(Participante::eGrupo).toList());
-
-        }
-        return this.participantes.addAll(novoParticipantes);
-
-    }
-
     public Caixinha getCaixinha() {
         return caixinha;
     }
@@ -117,7 +100,7 @@ public final class Grupo extends GrupoComponent {
             throw new OperacaoNaoPermitidaException("O usuario " + usuario.getNome() + " não está no grupo");
         }
 
-        componente.get().eAdmin = true;
+        componente.get().tornarAdmin(true);
 
     }
 
@@ -139,134 +122,23 @@ public final class Grupo extends GrupoComponent {
         }
     }
 
-    @Override
+    // @Override
     public GrupoComponent getParente() {
         return this.parente;
 
     }
 
-    @Override
+    // @Override
     public String getNome() {
         return this.nome;
     }
 
-    @Override
+    // @Override
     public String toString() {
         return "Grupo [id=" + super.getId() + ", nome=" + nome + ", parente=" + parente.getNome() + ", dono="
                 + dono.getNome()
                 + ", caixinha="
                 + caixinha + "]";
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((parente == null) ? 0 : parente.hashCode());
-        result = prime * result + ((dono == null) ? 0 : dono.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Grupo other = (Grupo) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (parente == null) {
-            if (other.parente != null)
-                return false;
-        } else if (!parente.equals(other.parente))
-            return false;
-        if (dono == null) {
-            if (other.dono != null)
-                return false;
-        } else if (!dono.equals(other.dono))
-            return false;
-        return true;
-    }
-
-    /**
-     * Classe interna para controle do grupo.
-     * Tem alguns metodos uteis, e o controle do administrador
-     */
-
-    @Entity
-    private class Participante {
-
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-        @OneToOne(fetch = FetchType.LAZY)
-        private GrupoComponent participante;
-        private boolean eAdmin;
-
-        public Participante(GrupoComponent participante) {
-            if (participante == null) {
-                // Lançar uma excessão
-            }
-            this.participante = participante;
-            this.eAdmin = false;
-
-        }
-
-        public GrupoComponent getParticipante() {
-            return participante;
-        }
-
-        public boolean eAdmin() {
-            return this.eAdmin;
-        }
-
-        public boolean eUsuario() {
-            return this.participante instanceof Usuario;
-        }
-
-        public boolean eGrupo() {
-            return this.participante instanceof Grupo;
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + getEnclosingInstance().hashCode();
-            result = prime * result + ((participante == null) ? 0 : participante.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            Participante other = (Participante) obj;
-            if (!getEnclosingInstance().equals(other.getEnclosingInstance()))
-                return false;
-            if (participante == null) {
-                if (other.participante != null)
-                    return false;
-            } else if (!participante.equals(other.participante))
-                return false;
-            return true;
-        }
-
-        private Grupo getEnclosingInstance() {
-            return Grupo.this;
-        }
-
     }
 
 }

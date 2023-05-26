@@ -5,7 +5,11 @@ import java.time.LocalDate;
 
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 
-public class EstornoSimples implements EstrategiaEstorno {
+import jakarta.persistence.Entity;
+
+@Entity
+public class EstornoSimples extends EstrategiaEstorno {
+
     @Override
     public void calcularExtorno(Caixinha caixinha) {
         int usuarios = caixinha.getGrupo().getUsuarios().size();

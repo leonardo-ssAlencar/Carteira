@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.padroes.projetos.carteira.model.entidades.excecoes.OperacaoNaoPermitidaException;
@@ -24,8 +23,7 @@ import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 @SpringBootTest
 public class GrupoTeste {
 
-    @Autowired // Injeta a dependencia, o mesmo que fazer new GrupoInterface();
-    GrupoFachada grupoInterface;
+    GrupoFachada grupoInterface = new GrupoFachada();
 
     Usuario user1;
     Grupo grupo;
@@ -77,6 +75,10 @@ public class GrupoTeste {
         String nomeGrupo = "familia";
         Grupo grupo1 = grupoInterface.criarGrupo(nomeGrupo, user1);
 
+        long x = 0;
+
+        grupo1.setId(x++);
+
         assertNotNull(grupo1, "O grupo não foi criado");
 
         assertEquals(nomeGrupo, grupo1.getNome(), "O nome do grupo é diferente do esperado");
@@ -89,9 +91,14 @@ public class GrupoTeste {
                 new Usuario("maria", "1999999999", "maria@carteira.com", "nomeGrupo"),
                 new Usuario("jonatan", "1999999999", "jonatan@carteira.com", "nomeGrupo"));
 
-        assertTrue(() -> grupo1.setParticipantes(participantes), "Não adicionou os usuarios");
+        for (GrupoComponent component : participantes) {
+            component.setId(x++);
+            assertTrue(() -> grupo1.setParticipantes(component), "Não adicionou os usuarios");
+
+        }
 
         Usuario novoAdmin = new Usuario("admin2", "(WW)9XXXX-YYYY", "admin2@carteira.com", "nomeGrupo");
+        novoAdmin.setId(x++);
 
         assertTrue(() -> grupo1.setParticipantes(novoAdmin), "Nao adicionou o participante");
 
@@ -106,9 +113,11 @@ public class GrupoTeste {
         List<GrupoComponent> g1Participantes = grupo1.getParticipantes();
         assertTrue(g1Participantes.containsAll(g1Participantes), "Não foram adicionados os participantes do grupo");
 
-        assertFalse(() -> grupo1.setParticipantes(user1), "Um mesmo participante não pode ser adicionado duas vezes");
+        assertFalse(() -> grupo1.setParticipantes(novoAdmin),
+                "Um mesmo participante não pode ser adicionado duas vezes");
 
         Usuario naoVaiTaNoGrup = new Usuario("naoVai", "775555555", "naoVai@carteira.com", "1223");
+        naoVaiTaNoGrup.setId(x++);
 
         assertThrows(OperacaoNaoPermitidaException.class, () -> grupo1.tornarAdmin(naoVaiTaNoGrup),
                 "Usuario que não está no grupo não pode ser administrador ");
@@ -120,26 +129,5 @@ public class GrupoTeste {
         assertTrue(grupo1.getAdministradores().contains(novoAdmin), "O usuario não foi adicionado como administrador");
 
     }
-
-    // @Test
-    // public void subGrupos() {
-
-    // String nomeGrupo = "Familia";
-    // Grupo subgrupo = grupoInterface.criarGrupo(nomeGrupo, grupo);
-
-    // assertEquals(nomeGrupo, subgrupo.getNome(), "O nome não foi adicionado da" +
-    // "forma esperada");
-
-    // assertEquals(grupo, subgrupo.getDono(), "O dono não foi especificado da forma
-    // esperada");
-    // assertTrue(grupo.getParticipantes().contains(subgrupo), "O subgrupo não foi
-    // cadastrado");
-    // assertNotNull(subgrupo.getParente(), "O grupo pai não foi cadastrado");
-    // assertEquals(grupo, subgrupo.getParente(), "O grupo parente está errado");
-
-    // assertEquals(grupo.getAdministradores(), subgrupo.getAdministradores(),
-    // "Os administradores não foram cadastrados");
-
-    // }
 
 }

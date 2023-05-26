@@ -5,6 +5,7 @@ import java.util.Stack;
 import com.padroes.projetos.carteira.model.entidades.Mensagens;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public final class Usuario extends GrupoComponent {
@@ -12,12 +13,14 @@ public final class Usuario extends GrupoComponent {
     private String telefone;
     private String email;
     private String senha;
+    @OneToMany
     private Stack<Mensagens> notificacoes = new Stack<>();
 
     public Usuario() {
     }
 
     public Usuario(String nome, String telefone, String email, String senha) {
+
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;

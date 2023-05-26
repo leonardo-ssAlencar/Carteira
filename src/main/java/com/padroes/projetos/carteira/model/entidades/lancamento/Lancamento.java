@@ -5,12 +5,27 @@ import java.time.LocalDateTime;
 
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 
-public abstract class Lancamento {
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToOne;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Lancamento {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
+    @OneToOne(fetch = FetchType.LAZY)
     protected Usuario usuario;
     protected String mensagem;
     protected BigDecimal valor;
+    @OneToOne
     protected Operacao operacao;
     protected LocalDateTime dataHoraLancamento;
 

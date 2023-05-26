@@ -31,10 +31,12 @@ public class CaixinhaTeste {
     Usuario user;
     Grupo grupo;
     Caixinha caixinha;
+    long x = 0;
 
     @BeforeEach
     public void inicializar() {
         user = new Usuario("leonardo", "19999999", "leonardo@mail.com", "1233");
+        user.setId(x++);
         grupo = fachada.criarGrupoUsuario(user);
 
         CaixinhaBuilder builder = new CaixinhaBuilder();
@@ -50,7 +52,6 @@ public class CaixinhaTeste {
         assertEquals(LocalDate.of(2023, 05, 31), caixinha.getFechamento());
         assertFalse(caixinha.isMensal());
         assertEquals(new BigDecimal(0), caixinha.getValorTotal());
-        assertNull(caixinha.getProibidos());
         assertNull(caixinha.getItens());
         assertNull(caixinha.getMeta());
 

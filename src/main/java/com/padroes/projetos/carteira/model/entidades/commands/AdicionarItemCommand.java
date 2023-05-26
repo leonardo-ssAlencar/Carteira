@@ -12,22 +12,24 @@ import com.padroes.projetos.carteira.model.entidades.lancamento.LancamentoComIte
 
 public class AdicionarItemCommand extends LancamentoCommand {
 
+    private Lancamento lancamento;
+
     public AdicionarItemCommand(Grupo grupo, Usuario user, List<Item> items) {
         super(grupo);
         LancamentoComItemsFactory factory = new LancamentoComItemsFactory(items);
-        factory.criarLancamento(user, new BigDecimal(0), "", new AdicionarItems(items));
+        this.lancamento = factory.criarLancamento(user, new BigDecimal(0), "", new AdicionarItems(items));
 
     }
 
     @Override
     public void executar() {
+        getGrupo().getCaixinha().executarLancamento(this);
 
     }
 
     @Override
     public Lancamento getLancamento() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.lancamento;
     }
 
 }

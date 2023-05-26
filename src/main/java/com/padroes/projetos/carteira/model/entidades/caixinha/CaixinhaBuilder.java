@@ -3,15 +3,13 @@ package com.padroes.projetos.carteira.model.entidades.caixinha;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.padroes.projetos.carteira.model.entidades.Item;
-import com.padroes.projetos.carteira.model.entidades.enuns.TipoLancamento;
 import com.padroes.projetos.carteira.model.entidades.estrategiaEstorno.EstrategiaEstorno;
-import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.EstrategiaSimples;
+import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.LancamentoSimples;
 import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.LancamentoEstrategy;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotificacao;
@@ -19,7 +17,6 @@ import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotif
 @Service
 public class CaixinhaBuilder {
 
-    protected List<TipoLancamento> proibidos;
     protected List<Item> itens;
     protected EstrategiaNotificacao notificador;
     protected EstrategiaEstorno estorno;
@@ -34,14 +31,8 @@ public class CaixinhaBuilder {
         fechamento = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
         mensal = false;
         meta = null;
-        lancamentoEstrategy = new EstrategiaSimples();
+        lancamentoEstrategy = new LancamentoSimples();
 
-    }
-
-    public CaixinhaBuilder proibirTiposLancamentos(TipoLancamento... lancamentos) {
-        proibidos.addAll(Arrays.asList(lancamentos));
-
-        return this;
     }
 
     public CaixinhaBuilder notificador(EstrategiaNotificacao notificador) {
@@ -93,7 +84,7 @@ public class CaixinhaBuilder {
 
     public Caixinha build(Grupo grupo) {
 
-        return new Caixinha(grupo, proibidos, itens, notificador, estorno, valorTotal, meta, fechamento, mensal,
+        return new Caixinha(grupo, itens, notificador, estorno, valorTotal, meta, fechamento, mensal,
                 lancamentoEstrategy);
 
     }

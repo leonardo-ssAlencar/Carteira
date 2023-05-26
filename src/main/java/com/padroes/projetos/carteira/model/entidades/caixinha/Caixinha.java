@@ -7,42 +7,66 @@ import java.util.List;
 
 import com.padroes.projetos.carteira.model.entidades.Item;
 import com.padroes.projetos.carteira.model.entidades.commands.LancamentoCommand;
-import com.padroes.projetos.carteira.model.entidades.enuns.TipoLancamento;
 import com.padroes.projetos.carteira.model.entidades.estrategiaEstorno.EstrategiaEstorno;
 import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.LancamentoEstrategy;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
 import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotificacao;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+
+@Entity
 public class Caixinha {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne
     protected Grupo grupo;
-    protected LancamentoEstrategy lancamentoEstrategy;
+
+    @ManyToOne
+    protected LancamentoEstrategy lancamentoEst;
+
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "caixinha_id")
     protected List<Lancamento> lancamentos = new ArrayList<>();
-    protected List<TipoLancamento> proibidos;
-    protected List<Item> itens;
+
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "caixinha_id")
+    protected List<Item> itens = new ArrayList<>();
+
+    @ManyToOne
     protected EstrategiaNotificacao notificador;
-    protected EstrategiaEstorno estorno;
+
+    @ManyToOne
+    protected EstrategiaEstorno estornoEst;
+
     protected BigDecimal valorTotal;
     protected BigDecimal meta;
     protected LocalDate fechamento;
     protected boolean mensal;
 
-    protected Caixinha(Grupo grupo, List<TipoLancamento> permitidos, List<Item> itens,
+    protected Caixinha(Grupo grupo, List<Item> itens,
             EstrategiaNotificacao notificador, EstrategiaEstorno estorno, BigDecimal valorTotal, BigDecimal meta,
             LocalDate fechamento, boolean mensal, LancamentoEstrategy lancamentoEstrategy) {
         this.grupo = grupo;
 
-        this.proibidos = permitidos;
         this.itens = itens;
         this.notificador = notificador;
-        this.estorno = estorno;
+        this.estornoEst = estorno;
         this.valorTotal = valorTotal;
         this.meta = meta;
         this.fechamento = fechamento;
         this.mensal = mensal;
-        this.lancamentoEstrategy = lancamentoEstrategy;
+        this.lancamentoEst = lancamentoEstrategy;
     }
 
     public Caixinha() {
@@ -50,8 +74,8 @@ public class Caixinha {
     }
 
     public void executarLancamento(LancamentoCommand command) {
-        Lancamento lancamento = lancamentoEstrategy.executar(this, command);
-        lancamentos.add(lancamento);
+        Lancamento novoLancamento = lancamentoEst.executar(this, command);
+        lancamentos.add(novoLancamento);
     }
 
     public void notificar(String mensagem) {
@@ -60,7 +84,7 @@ public class Caixinha {
     }
 
     public void realizarEstorno() {
-        this.estorno.calcularExtorno(this);
+        this.estornoEst.calcularExtorno(this);
     }
 
     public void setId(Long id) {
@@ -80,15 +104,11 @@ public class Caixinha {
     }
 
     public LancamentoEstrategy getLancamentoEstrategy() {
-        return lancamentoEstrategy;
+        return lancamentoEst;
     }
 
     public List<Lancamento> getLancamentos() {
         return lancamentos;
-    }
-
-    public List<TipoLancamento> getProibidos() {
-        return proibidos;
     }
 
     public List<Item> getItens() {
@@ -105,7 +125,7 @@ public class Caixinha {
     }
 
     public EstrategiaEstorno getEstorno() {
-        return estorno;
+        return estornoEst;
     }
 
     public BigDecimal getValorTotal() {

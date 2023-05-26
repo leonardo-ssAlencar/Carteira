@@ -15,7 +15,7 @@ import jakarta.persistence.OneToOne;
 public abstract class GrupoComponent {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     protected Long id;
     protected String nome;
     @OneToOne
@@ -42,7 +42,7 @@ public abstract class GrupoComponent {
      * caso de um usuario deve retornar o grupo raiz dele, no caso de um subGrupo
      * deve retornar o grupo pai dele
      * 
-     * @return GrupoComponent parente
+     * // * @return GrupoComponent parente
      */
     public GrupoComponent getParente() {
         return this.parente;
@@ -51,10 +51,14 @@ public abstract class GrupoComponent {
     /**
      * O metodo deve retornar o nome em que o componente foi cadastrado
      * 
-     * @return String com o nome do componente
+     * // * @return String com o nome do componente
      */
     public String getNome() {
         return this.nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public abstract void notificar(Mensagens mensagem);

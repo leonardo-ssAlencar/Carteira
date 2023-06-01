@@ -2,20 +2,18 @@ package com.padroes.projetos.carteira.model.entidades.notificacao;
 
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Transient;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class EstrategiaNotificacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Transient
+    private EstrategiaNotificacao instancia;
 
     public abstract void notificar(String mensagem, Caixinha caixinha);
 

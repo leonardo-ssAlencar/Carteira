@@ -4,12 +4,8 @@ import java.math.BigDecimal;
 
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Transient;
 
-@Entity
-@DiscriminatorValue("CRED")
 public class Credito extends Operacao {
 
     @Transient

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import com.padroes.projetos.carteira.model.entidades.Mensagens;
+import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 import com.padroes.projetos.carteira.model.entidades.excecoes.OperacaoNaoPermitidaException;
 
@@ -13,8 +13,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "grupo")
 public final class Grupo extends GrupoComponent {
 
     // O dono do grupo, normalmente quem o criou
@@ -38,13 +40,13 @@ public final class Grupo extends GrupoComponent {
     }
 
     // @Override
-    public void notificar(Mensagens msg) {
+    public void notificar(Notificacoes msg) {
         this.participantes.stream().filter(Participante::eUsuario).map(x -> (Usuario) x.getParticipante())
                 .forEach(x -> x.notificar(msg));
 
     }
 
-    public void notificar(Mensagens mensagen, Usuario user) {
+    public void notificar(Notificacoes mensagen, Usuario user) {
         Optional<Usuario> usuarioGrupo = this.participantes.stream().filter(Participante::eUsuario)
                 .map(x -> (Usuario) x.getParticipante())
                 .filter(x -> x.equals(user)).findFirst();
@@ -117,7 +119,7 @@ public final class Grupo extends GrupoComponent {
     }
 
     private void verificarRaiz() {
-        if (parente == GrupoFachada.grupoRaiz) {
+        if (parente == null) {
             throw new OperacaoNaoPermitidaException("A operação não pode ser concluida pois já está na raiz ");
         }
     }

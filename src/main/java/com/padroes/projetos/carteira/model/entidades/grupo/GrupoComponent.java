@@ -1,6 +1,6 @@
 package com.padroes.projetos.carteira.model.entidades.grupo;
 
-import com.padroes.projetos.carteira.model.entidades.Mensagens;
+import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,11 +12,13 @@ import jakarta.persistence.OneToOne;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+
 public abstract class GrupoComponent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     protected Long id;
+
     protected String nome;
     @OneToOne
     protected GrupoComponent parente;
@@ -61,7 +63,7 @@ public abstract class GrupoComponent {
         this.nome = nome;
     }
 
-    public abstract void notificar(Mensagens mensagem);
+    public abstract void notificar(Notificacoes mensagem);
 
     @Override
     public int hashCode() {

@@ -5,9 +5,6 @@ import java.time.LocalDate;
 
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 
-import jakarta.persistence.Entity;
-
-@Entity
 public class EstornoSimples extends EstrategiaEstorno {
 
     @Override

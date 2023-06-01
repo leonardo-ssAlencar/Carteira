@@ -39,7 +39,7 @@ public class GrupoTeste {
         // grupo = grupoInterface.criarGrupoUsuario(user1);
 
         assertEquals(user1.getNome(), grupo.getNome(), "O nome do grupo é diferente do nome do usuario");
-        assertEquals(GrupoFachada.grupoRaiz, grupo.getParente(), "O grupo não tem o grupoRaiz como pai");
+        assertEquals(null, grupo.getParente(), "O grupo não tem o grupoRaiz como pai");
         assertEquals(user1, grupo.getDono(), "O grupo não recebeu como o dono o Usuario passado!");
 
         Usuario usuario = new Usuario("aaa", "null", "null", "ull");

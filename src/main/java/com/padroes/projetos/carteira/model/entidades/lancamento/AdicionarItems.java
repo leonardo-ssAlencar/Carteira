@@ -8,15 +8,8 @@ import java.util.Optional;
 import com.padroes.projetos.carteira.model.entidades.Item;
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Transient;
-
-@Entity
-@DiscriminatorValue("ADD-ITEM")
 public class AdicionarItems extends Operacao {
 
-    @Transient
     private List<Item> items;
 
     public AdicionarItems(List<Item> items) {

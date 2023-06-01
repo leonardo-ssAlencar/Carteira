@@ -8,11 +8,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.padroes.projetos.carteira.model.entidades.Item;
+import com.padroes.projetos.carteira.model.entidades.estrategiaEstorno.EstornoSimples;
 import com.padroes.projetos.carteira.model.entidades.estrategiaEstorno.EstrategiaEstorno;
 import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.LancamentoSimples;
 import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.LancamentoEstrategy;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotificacao;
+import com.padroes.projetos.carteira.model.entidades.notificacao.NotificadorSimples;
 
 @Service
 public class CaixinhaBuilder {
@@ -32,6 +34,8 @@ public class CaixinhaBuilder {
         mensal = false;
         meta = null;
         lancamentoEstrategy = new LancamentoSimples();
+        notificador = new NotificadorSimples();
+        estorno = new EstornoSimples();
 
     }
 

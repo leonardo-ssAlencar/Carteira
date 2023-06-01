@@ -7,12 +7,8 @@ import java.util.List;
 import com.padroes.projetos.carteira.model.entidades.Item;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
-@Entity
-@DiscriminatorValue("COM_ITEM")
 public class LancamentoComItems extends Lancamento {
 
     @OneToMany

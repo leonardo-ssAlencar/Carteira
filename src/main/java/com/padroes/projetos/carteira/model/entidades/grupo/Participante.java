@@ -1,12 +1,10 @@
 package com.padroes.projetos.carteira.model.entidades.grupo;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 
 /**
  * Classe interna para controle do grupo.
@@ -19,11 +17,11 @@ public class Participante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private GrupoComponent participante;
+    private boolean eAdmin;
     @ManyToOne
     private Grupo grupo;
-    private boolean eAdmin;
 
     public Participante(GrupoComponent participante) {
         if (participante == null) {
@@ -32,6 +30,14 @@ public class Participante {
         this.participante = participante;
         this.eAdmin = false;
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public GrupoComponent getParticipante() {
@@ -53,6 +59,14 @@ public class Participante {
 
     public boolean eGrupo() {
         return this.participante instanceof Grupo;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
     }
 
     @Override
@@ -78,22 +92,6 @@ public class Participante {
         } else if (!participante.equals(other.participante))
             return false;
         return true;
-    }
-
-    public Grupo getGrupo() {
-        return grupo;
-    }
-
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
 }

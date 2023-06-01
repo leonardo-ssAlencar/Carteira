@@ -5,17 +5,12 @@ import java.time.LocalDateTime;
 
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToOne;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Lancamento {
 
     @Id

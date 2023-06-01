@@ -13,14 +13,14 @@ import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
 import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotificacao;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 
 @Entity
 public class Caixinha {
@@ -29,27 +29,22 @@ public class Caixinha {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(mappedBy = "caixinha", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     protected Grupo grupo;
 
-    @ManyToOne
+    @Transient
     protected LancamentoEstrategy lancamentoEst;
-
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "caixinha_id")
+    @Transient
     protected List<Lancamento> lancamentos = new ArrayList<>();
-
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "caixinha_id")
+    @Transient
     protected List<Item> itens = new ArrayList<>();
-
-    @ManyToOne
+    @Transient
     protected EstrategiaNotificacao notificador;
-
-    @ManyToOne
+    @Transient
     protected EstrategiaEstorno estornoEst;
 
     protected BigDecimal valorTotal;
+
     protected BigDecimal meta;
     protected LocalDate fechamento;
     protected boolean mensal;

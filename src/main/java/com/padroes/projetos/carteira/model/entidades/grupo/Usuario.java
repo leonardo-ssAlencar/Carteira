@@ -1,20 +1,25 @@
 package com.padroes.projetos.carteira.model.entidades.grupo;
 
+import java.util.List;
 import java.util.Stack;
 
-import com.padroes.projetos.carteira.model.entidades.Mensagens;
+import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(indexes = @Index(name = "email_ix", columnList = "email"))
 public final class Usuario extends GrupoComponent {
 
     private String telefone;
     private String email;
     private String senha;
-    @OneToMany
-    private Stack<Mensagens> notificacoes = new Stack<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
+    private List<Notificacoes> notificacoes = new Stack<>();
 
     public Usuario() {
     }
@@ -28,11 +33,11 @@ public final class Usuario extends GrupoComponent {
     }
 
     @Override
-    public void notificar(Mensagens msg) {
+    public void notificar(Notificacoes msg) {
         this.notificacoes.add(msg);
     }
 
-    public Stack<Mensagens> getMensagem() {
+    public List<Notificacoes> getMensagem() {
         return this.notificacoes;
 
     }

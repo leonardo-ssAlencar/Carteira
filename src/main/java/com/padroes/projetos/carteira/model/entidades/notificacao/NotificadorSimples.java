@@ -1,17 +1,14 @@
 package com.padroes.projetos.carteira.model.entidades.notificacao;
 
-import com.padroes.projetos.carteira.model.entidades.Mensagens;
+import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 
-import jakarta.persistence.Entity;
-
-@Entity
 public class NotificadorSimples extends EstrategiaNotificacao {
 
     @Override
     public void notificar(String mensagem, Caixinha caixinha) {
 
-        Mensagens msg = new Mensagens(mensagem);
+        Notificacoes msg = new Notificacoes(mensagem);
 
         caixinha.getGrupo().notificar(msg);
 

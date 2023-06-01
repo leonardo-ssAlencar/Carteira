@@ -2,30 +2,8 @@ package com.padroes.projetos.carteira.model.entidades.grupo;
 
 import org.springframework.stereotype.Service;
 
-import com.padroes.projetos.carteira.model.entidades.Mensagens;
-
 @Service
 public class GrupoFachada {
-
-    /**
-     * Classe estatica para criação de grupos raizes
-     */
-    public static GrupoComponent grupoRaiz = new GrupoComponent() {
-        @Override
-        public String getNome() {
-            return "Raiz";
-        }
-
-        @Override
-        public GrupoComponent getParente() {
-            return this;
-
-        }
-
-        public void notificar(Mensagens msg) {
-        };
-
-    };
 
     /**
      * Cria um grupo de usuario, ou seja um grupo que serve de raiz para todos os
@@ -38,7 +16,7 @@ public class GrupoFachada {
     public Grupo criarGrupoUsuario(Usuario usuario) {
 
         Grupo grupo = new Grupo();
-        grupo.parente = grupoRaiz;
+        grupo.parente = null;
         grupo.nome = usuario.getNome();
         grupo.setDono(usuario);
         usuario.setParente(grupo);

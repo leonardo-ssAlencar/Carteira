@@ -37,10 +37,10 @@ public class GrupoFachada {
         grupo.setNome(nome);
         grupo.parente = (dono.getParente());
         grupo.setParticipantes(dono);
+        grupo.tornarAdmin((Usuario) dono);
 
         Grupo rootGrupo = (Grupo) dono.getParente();
         rootGrupo.setParticipantes(grupo);
-        grupo.tornarAdmin((Usuario) dono);
 
         return grupo;
 

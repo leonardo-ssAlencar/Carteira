@@ -24,10 +24,10 @@ public final class Grupo extends GrupoComponent {
     @OneToOne
     private Usuario dono;
     // Lista dos participantes do grupo
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "grupo", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "grupo", cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     private Set<Participante> participantes = new HashSet<>();
     // A Caixinha do grupo
-    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE })
     private Caixinha caixinha;
 
     public Grupo() {

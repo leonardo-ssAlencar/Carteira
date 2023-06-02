@@ -18,7 +18,7 @@ public final class Usuario extends GrupoComponent {
     private String telefone;
     private String email;
     private String senha;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "usuario")
     private List<Notificacoes> notificacoes = new Stack<>();
 
     public Usuario() {

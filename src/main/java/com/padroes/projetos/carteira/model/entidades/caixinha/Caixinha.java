@@ -84,6 +84,7 @@ public class Caixinha {
 
     public void executarLancamento(LancamentoCommand command) {
         Lancamento novoLancamento = getLancamentoEstrategy().executar(this, command);
+        novoLancamento.setCaixinha(this);
         lancamentos.add(novoLancamento);
     }
 

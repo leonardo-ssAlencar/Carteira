@@ -6,7 +6,7 @@ import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 
 import jakarta.persistence.Transient;
 
-public class Credito extends Operacao {
+public class Credito implements Operacao {
 
     @Transient
     private BigDecimal valor;

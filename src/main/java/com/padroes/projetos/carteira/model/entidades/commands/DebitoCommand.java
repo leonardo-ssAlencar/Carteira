@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
-import com.padroes.projetos.carteira.model.entidades.lancamento.Debito;
 import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
 import com.padroes.projetos.carteira.model.entidades.lancamento.LancamentoFactory;
+import com.padroes.projetos.carteira.model.enums.OperacoesEnum;
 
 public class DebitoCommand extends LancamentoCommand {
 
@@ -14,7 +14,7 @@ public class DebitoCommand extends LancamentoCommand {
 
     public DebitoCommand(Grupo grupo, BigDecimal valor, Usuario user, String descricao, LancamentoFactory factory) {
         super(grupo);
-        this.lancamento = factory.criarLancamento(user, valor, descricao, new Debito(valor));
+        this.lancamento = factory.criarLancamento(user, valor, descricao, OperacoesEnum.DEBITO);
 
     }
 

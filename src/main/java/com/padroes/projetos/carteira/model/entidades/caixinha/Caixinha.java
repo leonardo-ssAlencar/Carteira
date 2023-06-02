@@ -5,56 +5,70 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.padroes.projetos.carteira.model.entidades.Item;
 import com.padroes.projetos.carteira.model.entidades.commands.LancamentoCommand;
+import com.padroes.projetos.carteira.model.entidades.estrategiaEstorno.EstornoSimples;
 import com.padroes.projetos.carteira.model.entidades.estrategiaEstorno.EstrategiaEstorno;
 import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.LancamentoEstrategy;
+import com.padroes.projetos.carteira.model.entidades.estrategiaLancamento.LancamentoSimples;
+import com.padroes.projetos.carteira.model.entidades.estrategiaNotificacao.EstrategiaNotificacao;
+import com.padroes.projetos.carteira.model.entidades.estrategiaNotificacao.NotificadorSimples;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
-import com.padroes.projetos.carteira.model.entidades.notificacao.EstrategiaNotificacao;
+import com.padroes.projetos.carteira.model.enums.estrategias.EstrategiaEstornoEnum;
+import com.padroes.projetos.carteira.model.enums.estrategias.EstrategiaNotificacaoEnum;
+import com.padroes.projetos.carteira.model.enums.estrategias.LancamentoEstrategyEnum;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Transient;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorValue("SI")
 public class Caixinha {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.ORDINAL)
+    private LancamentoEstrategyEnum lancamentoEst;
+
+    @Enumerated(EnumType.ORDINAL)
+    private EstrategiaNotificacaoEnum notificador;
+
+    @Enumerated(EnumType.ORDINAL)
+    private EstrategiaEstornoEnum estornoEst;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal valorTotal;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal meta;
+    private LocalDate fechamento;
+
+    @OneToMany(mappedBy = "caixinha", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Lancamento> lancamentos = new ArrayList<>();
+
+    private boolean mensal;
+
     @OneToOne(mappedBy = "caixinha", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     protected Grupo grupo;
 
-    @Transient
-    protected LancamentoEstrategy lancamentoEst;
-    @Transient
-    protected List<Lancamento> lancamentos = new ArrayList<>();
-    @Transient
-    protected List<Item> itens = new ArrayList<>();
-    @Transient
-    protected EstrategiaNotificacao notificador;
-    @Transient
-    protected EstrategiaEstorno estornoEst;
+    protected Caixinha(EstrategiaNotificacaoEnum notificador, EstrategiaEstornoEnum estorno, BigDecimal valorTotal,
+            BigDecimal meta, LocalDate fechamento, boolean mensal, LancamentoEstrategyEnum lancamentoEstrategy) {
 
-    protected BigDecimal valorTotal;
-
-    protected BigDecimal meta;
-    protected LocalDate fechamento;
-    protected boolean mensal;
-
-    protected Caixinha(Grupo grupo, List<Item> itens,
-            EstrategiaNotificacao notificador, EstrategiaEstorno estorno, BigDecimal valorTotal, BigDecimal meta,
-            LocalDate fechamento, boolean mensal, LancamentoEstrategy lancamentoEstrategy) {
-        this.grupo = grupo;
-
-        this.itens = itens;
         this.notificador = notificador;
         this.estornoEst = estorno;
         this.valorTotal = valorTotal;
@@ -69,17 +83,17 @@ public class Caixinha {
     }
 
     public void executarLancamento(LancamentoCommand command) {
-        Lancamento novoLancamento = lancamentoEst.executar(this, command);
+        Lancamento novoLancamento = getLancamentoEstrategy().executar(this, command);
         lancamentos.add(novoLancamento);
     }
 
     public void notificar(String mensagem) {
-        this.notificador.notificar(mensagem, this);
+        getNotificador().notificar(mensagem, this);
 
     }
 
     public void realizarEstorno() {
-        this.estornoEst.calcularExtorno(this);
+        getEstorno().calcularExtorno(this);
     }
 
     public void setId(Long id) {
@@ -99,28 +113,29 @@ public class Caixinha {
     }
 
     public LancamentoEstrategy getLancamentoEstrategy() {
-        return lancamentoEst;
+
+        switch (this.lancamentoEst) {
+            case LANCAMENTO_SIMPLES:
+                return new LancamentoSimples();
+
+        }
+
+        return new LancamentoSimples();
+
     }
 
     public List<Lancamento> getLancamentos() {
         return lancamentos;
     }
 
-    public List<Item> getItens() {
-        return itens;
-    }
-
-    public void addItems(List<Item> items) {
-        this.itens.addAll(items);
-
-    }
-
     public EstrategiaNotificacao getNotificador() {
-        return notificador;
+        // TODO switch para o enum
+        return new NotificadorSimples();
     }
 
     public EstrategiaEstorno getEstorno() {
-        return estornoEst;
+        // TODO Switch para o enum
+        return new EstornoSimples();
     }
 
     public BigDecimal getValorTotal() {
@@ -139,4 +154,35 @@ public class Caixinha {
         return mensal;
     }
 
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    public void setLancamentoEst(LancamentoEstrategyEnum lancamentoEst) {
+        this.lancamentoEst = lancamentoEst;
+    }
+
+    public void setLancamentos(List<Lancamento> lancamentos) {
+        this.lancamentos = lancamentos;
+    }
+
+    public void setNotificador(EstrategiaNotificacaoEnum notificador) {
+        this.notificador = notificador;
+    }
+
+    public void setEstornoEst(EstrategiaEstornoEnum estornoEst) {
+        this.estornoEst = estornoEst;
+    }
+
+    public void setMeta(BigDecimal meta) {
+        this.meta = meta;
+    }
+
+    public void setFechamento(LocalDate fechamento) {
+        this.fechamento = fechamento;
+    }
+
+    public void setMensal(boolean mensal) {
+        this.mensal = mensal;
+    }
 }

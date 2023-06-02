@@ -27,7 +27,7 @@ public class AplicacaoFachada {
     @Autowired
     GrupoFachada fachada;
 
-    public void cadastrarUsuario(Usuario usuario) {
+    public Usuario cadastrarUsuario(Usuario usuario) {
 
         usuarioRepo.save(usuario);
 
@@ -35,26 +35,28 @@ public class AplicacaoFachada {
 
         CaixinhaBuilder builder = new CaixinhaBuilder();
 
-        Caixinha caixinha = builder.build(grupo);
+        Caixinha caixinha = builder.build();
         grupo.setCaixinha(caixinha);
 
         caixinhaRepo.save(caixinha);
 
         grupoRepo.save(grupo);
 
+        return usuarioRepo.save(usuario);
     }
 
-    public boolean validarUsuario(String email, String senha) {
+    public Optional<Usuario> validarUsuario(String email, String senha) {
 
         Optional<Usuario> userOpt = usuarioRepo.findOneByEmail(email);
 
         if (userOpt.isPresent()) {
             Usuario user = userOpt.get();
-            return user.getSenha().equals(senha);
-
+            if (user.getSenha().equals(senha)) {
+                return userOpt;
+            }
         }
 
-        return false;
+        return Optional.empty();
 
     }
 

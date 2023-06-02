@@ -7,8 +7,9 @@ import java.util.Set;
 
 import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
-import com.padroes.projetos.carteira.model.entidades.excecoes.OperacaoNaoPermitidaException;
+import com.padroes.projetos.carteira.model.excecoes.OperacaoNaoPermitidaException;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
@@ -23,10 +24,10 @@ public final class Grupo extends GrupoComponent {
     @OneToOne
     private Usuario dono;
     // Lista dos participantes do grupo
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "grupo")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "grupo", cascade = CascadeType.ALL)
     private Set<Participante> participantes = new HashSet<>();
     // A Caixinha do grupo
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private Caixinha caixinha;
 
     public Grupo() {
@@ -71,16 +72,20 @@ public final class Grupo extends GrupoComponent {
         this.dono = (Usuario) dono;
     }
 
-    public List<GrupoComponent> getParticipantes() {
-        return participantes.stream().map(Participante::getParticipante).toList();
+    public List<Participante> getParticipantes() {
+        return this.participantes.stream().toList();
     }
 
     public boolean setParticipantes(GrupoComponent participante) {
 
-        if (participante instanceof Usuario)
+        if (participante instanceof Usuario) {
             verificarRaiz();
+        }
 
-        return this.participantes.add(new Participante(participante));
+        Participante tempP = new Participante(participante);
+        tempP.setGrupo(this);
+
+        return this.participantes.add(tempP);
 
     }
 
@@ -90,6 +95,7 @@ public final class Grupo extends GrupoComponent {
 
     public void setCaixinha(Caixinha caixinha) {
         this.caixinha = caixinha;
+        caixinha.setGrupo(this);
     }
 
     public void tornarAdmin(Usuario usuario) {
@@ -138,9 +144,7 @@ public final class Grupo extends GrupoComponent {
     // @Override
     public String toString() {
         return "Grupo [id=" + super.getId() + ", nome=" + nome + ", parente=" + parente.getNome() + ", dono="
-                + dono.getNome()
-                + ", caixinha="
-                + caixinha + "]";
+                + dono.getNome() + "]";
     }
 
 }

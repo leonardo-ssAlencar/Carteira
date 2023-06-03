@@ -40,10 +40,10 @@ public final class Grupo extends GrupoComponent {
 
     }
 
-    // @Override
+    @Override
     public void notificar(Notificacoes msg) {
         this.participantes.stream().filter(Participante::eUsuario).map(x -> (Usuario) x.getParticipante())
-                .forEach(x -> x.notificar(msg));
+                .forEach(x -> x.notificar(msg.clone()));
 
     }
 

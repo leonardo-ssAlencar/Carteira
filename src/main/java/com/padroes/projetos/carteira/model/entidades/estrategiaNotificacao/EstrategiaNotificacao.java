@@ -1,9 +1,12 @@
 package com.padroes.projetos.carteira.model.entidades.estrategiaNotificacao;
 
-import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
+import java.util.List;
+
+import com.padroes.projetos.carteira.model.entidades.Notificacoes;
+import com.padroes.projetos.carteira.model.entidades.grupo.Participante;
 
 public interface EstrategiaNotificacao {
 
-    public abstract void notificar(String mensagem, Caixinha caixinha);
+    public abstract List<Notificacoes> notificar(String mensagem, List<Participante> participantes);
 
 }

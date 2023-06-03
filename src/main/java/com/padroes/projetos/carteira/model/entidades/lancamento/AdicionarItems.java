@@ -19,6 +19,7 @@ public class AdicionarItems implements Operacao {
     @Override
     public BigDecimal executarOperacao(Caixinha caixinha) {
 
+        // TODO Impl
         if (!(caixinha instanceof CaixinhaComItens)) {
             throw new OperacaoNaoPermitidaException("A caixinha tem que aceitar itens");
 

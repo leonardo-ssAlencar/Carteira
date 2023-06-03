@@ -35,6 +35,7 @@ public final class Usuario extends GrupoComponent {
     @Override
     public void notificar(Notificacoes msg) {
         this.notificacoes.add(msg);
+        msg.setUsuario(this);
     }
 
     public List<Notificacoes> getMensagem() {

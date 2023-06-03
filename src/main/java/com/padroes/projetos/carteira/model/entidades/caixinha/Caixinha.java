@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 import com.padroes.projetos.carteira.model.entidades.commands.LancamentoCommand;
 import com.padroes.projetos.carteira.model.entidades.estrategiaEstorno.EstornoSimples;
 import com.padroes.projetos.carteira.model.entidades.estrategiaEstorno.EstrategiaEstorno;
@@ -88,8 +89,9 @@ public class Caixinha {
         lancamentos.add(novoLancamento);
     }
 
-    public void notificar(String mensagem) {
-        getNotificador().notificar(mensagem, this);
+    public List<Notificacoes> notificar(String mensagem) {
+
+        return getNotificador().notificar(mensagem, grupo.getParticipantes());
 
     }
 

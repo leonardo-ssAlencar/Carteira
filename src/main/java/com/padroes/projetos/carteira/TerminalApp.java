@@ -1,12 +1,14 @@
 package com.padroes.projetos.carteira;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
+import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 import com.padroes.projetos.carteira.model.entidades.caixinha.CaixinhaBuilder;
 import com.padroes.projetos.carteira.model.entidades.commands.CreditoCommand;
 import com.padroes.projetos.carteira.model.entidades.commands.DebitoCommand;
@@ -41,6 +43,8 @@ public class TerminalApp {
         adicionarParticipante();
 
         executarLancamento();
+
+        executarNotificacao();
 
     }
 
@@ -110,6 +114,15 @@ public class TerminalApp {
 
         fachada.salvarLancamento(command.getLancamento());
         fachada.salvarLancamento(command2.getLancamento());
+
+    }
+
+    public static void executarNotificacao() {
+
+        List<Notificacoes> notificacoes = contextoGrupo.getCaixinha()
+                .notificar("Ola a todos bem vindo ao meu grupo. Qualquer duvidas é só perguntar");
+
+        fachada.salvarNotificacoes(notificacoes);
 
     }
 

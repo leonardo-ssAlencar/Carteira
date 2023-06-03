@@ -6,10 +6,12 @@ import java.time.LocalDateTime;
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 import com.padroes.projetos.carteira.model.enums.OperacoesEnum;
+import com.padroes.projetos.carteira.model.excecoes.OperacaoNaoPermitidaException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -32,8 +34,10 @@ public class Lancamento {
     protected String mensagem;
     @Column(precision = 10, scale = 2)
     protected BigDecimal valor;
-    @Enumerated
+    @Enumerated(EnumType.ORDINAL)
     protected OperacoesEnum operacao;
+    @Enumerated(EnumType.ORDINAL)
+    private EstadoEnum estado;
     protected LocalDateTime dataHoraLancamento;
     @OneToOne(fetch = FetchType.LAZY)
     protected Usuario usuario;
@@ -72,19 +76,16 @@ public class Lancamento {
     }
 
     public Operacao getOperacao() {
-        Operacao op;
 
-        switch (operacao) {
-            case CREDITO:
-                op = new Debito(valor);
+        if (this.operacao == OperacoesEnum.CREDITO) {
+            return new Credito(valor);
 
-            case DEBITO:
-                op = new Credito(valor);
-            default:
-                op = new Debito(valor);
+        } else if (this.operacao == OperacoesEnum.DEBITO) {
+            return new Debito(valor);
         }
 
-        return op;
+        throw new OperacaoNaoPermitidaException("A operação não é possivel nesse tipo de lancamento");
+
     }
 
     public LocalDateTime getDataHoraLancamento() {
@@ -107,12 +108,19 @@ public class Lancamento {
         this.caixinha = caixinha;
     }
 
+    public void setEstado(EstadoEnum estado) {
+        this.estado = estado;
+    }
+
+    public EstadoEnum getEstado() {
+        return estado;
+    }
+
     @Override
     public String toString() {
         return "Lancamento [id=" + id + ", mensagem=" + mensagem + ", valor=" + valor + ", operacao=" + operacao
                 + ", dataHoraLancamento=" + dataHoraLancamento + ", usuario=" + usuario.getNome() + ", caixinha="
-                + caixinha
-                + "]";
+                + caixinha.getId() + "status=" + estado + "]";
     }
 
 }

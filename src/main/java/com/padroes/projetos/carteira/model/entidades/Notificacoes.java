@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Notificacoes {
+public class Notificacoes implements Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +44,10 @@ public class Notificacoes {
         return mensagem;
     }
 
+    public LocalDateTime getDataHoraEnvio() {
+        return dataHoraEnvio;
+    }
+
     public LocalDateTime getEnviada() {
         return dataHoraEnvio;
     }
@@ -62,6 +66,24 @@ public class Notificacoes {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Notificacoes clone() {
+
+        try {
+            return (Notificacoes) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+    @Override
+    public String toString() {
+        return "Notificacoes [id=" + id + ", mensagem=" + mensagem + ", dataHoraEnvio=" + dataHoraEnvio + ", lida="
+                + lida + ", usuario=" + usuario.getNome() + "]";
     }
 
 }

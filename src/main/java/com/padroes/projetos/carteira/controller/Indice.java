@@ -1,36 +1,33 @@
 package com.padroes.projetos.carteira.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.padroes.projetos.carteira.model.entidades.grupo.GrupoFachada;
+import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
+import com.padroes.projetos.carteira.repository.RepositorioLancamento;
 import com.padroes.projetos.carteira.service.AplicacaoFachada;
 
 @Controller
 public class Indice {
 
     @Autowired
-    GrupoFachada fachada;
+    GrupoFachada grupoFachada;
     @Autowired
-    AplicacaoFachada aplicacaoFachada;
+    AplicacaoFachada fachada;
+    @Autowired
+    RepositorioLancamento repo;
 
-    @GetMapping("/home")
-    public String homePag() {
-        return "inicial";
+    @GetMapping("/l")
+    public String homePag(Model model) {
+        List<Lancamento> lancamentos = repo.findAll();
+        model.addAttribute("lancamentos", lancamentos);
 
-    }
-
-    @GetMapping("/cadastro")
-    public String cadastroPag() {
-
-        return "cadastro";
-
-    }
-
-    @GetMapping("/login")
-    public String loginPag() {
-        return "login";
+        return "lancamentos";
 
     }
 

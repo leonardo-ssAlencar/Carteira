@@ -1,0 +1,26 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title> Testes </title>
+</head>
+
+
+<!-- Olhe no pacote controller na classe indice, tem um metodo que entrega essa pagina. Antes rode uma vez o TerminalApp para ver os lancamentos-->
+<div>
+    <ul th:each="lancamento : ${lancamentos}">
+        <li>
+            <span th:text="${lancamento.estado}"> </span>
+            <span th:text="${lancamento.mensagem}"> </span>
+            <span th:text="${lancamento.valor}"></span>
+            <span th:text="${lancamento.estado.toString}"></span>
+            <span th:text="${lancamento.usuario.nome}"> </span>
+
+        </li>
+    </ul>
+
+
+</div>
+
+
+
+</html>

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <title>Meus Lançamentos</title>
   <link rel="stylesheet" type="text/css" href="css/style2.css">
+
 </head>
+
 <body>
   <div class="container">
     <div class="user-info">
@@ -48,44 +51,45 @@
           </tbody>
         </table>
       </div>
-  <div class="transaction-history">
-    <h3  class="text-center">Meus Lançamentos</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Descrição</th>
-          <th>Valor</th>
-          <th>Grupo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td data-color="red">17/05/2023</td>
-          <td>Compra de alimentos</td>
-          <td>R$50.00</td>
-          <td>Grupo 3</td>
-        </tr>
-        <tr>
-          <td data-color="green">19/05/2023</td>
-          <td>Pagamento do IPTU</td>
-          <td>R$500.00</td>
-          <td>Grupo 3</td>
-        </tr>
-        <tr>
-          <td data-color="yellow">20/05/2023</td>
-          <td>Pagamento conta de água</td>
-          <td>R$180.00</td>
-          <td>Grupo 2</td>
-        </tr>
-        <tr>
-          <td data-color="red">26/05/2023</td>
-          <td>Compra de alimentos para festa</td>
-          <td>R$150.00</td>
-          <td>Grupo 1</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <div class="transaction-history">
+        <h3 class="text-center">Meus Lançamentos</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Grupo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-color="red">17/05/2023</td>
+                <td>Compra de alimentos</td>
+                <td>R$50.00</td>
+                <td>Grupo 3</td>
+              </tr>
+              <tr>
+                <td data-color="green">19/05/2023</td>
+                <td>Pagamento do IPTU</td>
+                <td>R$500.00</td>
+                <td>Grupo 3</td>
+              </tr>
+              <tr>
+                <td data-color="yellow">20/05/2023</td>
+                <td>Pagamento conta de água</td>
+                <td>R$180.00</td>
+                <td>Grupo 2</td>
+              </tr>
+              <tr>
+                <td data-color="red">26/05/2023</td>
+                <td>Compra de alimentos para festa</td>
+                <td>R$150.00</td>
+                <td>Grupo 1</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
 </body>
+
 </html>

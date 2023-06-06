@@ -8,11 +8,11 @@
   <div class="container">
     <div class="user-info">
       <div class="user-name">
-        <span>Pedro Wilson</span>
+        <span th:text="${nome}">Nome User</span>
       </div>
       <div class="balance">
         <span class="label">Saldo:</span>
-        <span class="value">R$1,500.00</span>
+        <span class="value" th:text="${saldo}">R$ 1,500.00</span>
       </div>
       <div class="user-icon"></div>
     </div>

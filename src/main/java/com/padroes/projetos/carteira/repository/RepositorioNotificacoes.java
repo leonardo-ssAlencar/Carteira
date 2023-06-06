@@ -1,3 +1,4 @@
+
 package com.padroes.projetos.carteira.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;

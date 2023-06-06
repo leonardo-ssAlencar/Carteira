@@ -243,7 +243,8 @@ public class TerminalApp {
         sBuilder.append("Digite:\n")
                 .append(x++ + " - Fazer lancamento\n")
                 .append(x++ + " - Listar lancamentos\n")
-                .append(x++ + " - Listar Usuarios\n");
+                .append(x++ + " - Listar Participantes\n")
+                .append(x++ + " - Adicionar Participante\n");
 
         do {
             System.out.println(grupo.getNome() + "----------" + "saldo: " + saldo);
@@ -264,6 +265,10 @@ public class TerminalApp {
                 case 3:
                     listaParticipantes(grupo);
                     break;
+                case 4:
+                    adicionarParticipante(grupo);
+                    break;
+
             }
 
         } while (opcao != 0);
@@ -278,6 +283,18 @@ public class TerminalApp {
         participantes.forEach(System.out::println);
 
         System.out.println();
+
+    }
+
+    public static void adicionarParticipante(Grupo grupo) {
+
+        System.out.println("--------- ADD PARTICIPANTE: --------- ");
+
+        System.out.print("Digite o email:");
+        String email = sc.nextLine();
+        Participante participante = fachada.buscarUsuario(email);
+
+        fachada.cadastrarParticipante(participante, grupo);
 
     }
 

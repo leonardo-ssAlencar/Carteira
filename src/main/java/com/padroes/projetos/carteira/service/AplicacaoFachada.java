@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.padroes.projetos.carteira.model.entidades.Notificacoes;
+import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.grupo.GrupoComponent;
 import com.padroes.projetos.carteira.model.entidades.grupo.GrupoFachada;
@@ -175,9 +176,9 @@ public class AplicacaoFachada {
         return participanteRepo.participantes(grupoUser);
     }
 
-    public Participante participante(Usuario user) {
+    public Participante participante(Usuario user, Grupo grupo) {
 
-        Optional<Participante> participante = participanteRepo.findById(user.getId());
+        Optional<Participante> participante = participanteRepo.participantesGrupo(grupo, user);
 
         if (participante.isEmpty()) {
             throw new UsuarioNaoExisteException("O usuario não está nesse grupo!!!");
@@ -198,9 +199,9 @@ public class AplicacaoFachada {
 
     }
 
-    public void caixinha(Grupo grupo) {
+    public Caixinha caixinha(Grupo grupo) {
 
-        caixinhaRepo.findById(grupo.getCaixinha().getId());
+        return caixinhaRepo.findById(grupo.getCaixinha().getId()).get();
     }
 
 }

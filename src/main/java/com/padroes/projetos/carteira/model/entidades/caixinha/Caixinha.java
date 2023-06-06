@@ -60,7 +60,7 @@ public class Caixinha {
     private BigDecimal meta;
     private LocalDate fechamento;
 
-    @OneToMany(mappedBy = "caixinha", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "caixinha", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Lancamento> lancamentos = new ArrayList<>();
 
     @Transient

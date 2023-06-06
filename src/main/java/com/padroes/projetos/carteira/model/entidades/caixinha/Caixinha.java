@@ -33,6 +33,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -62,9 +63,12 @@ public class Caixinha {
     @OneToMany(mappedBy = "caixinha", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Lancamento> lancamentos = new ArrayList<>();
 
+    @Transient
+    private List<Notificacoes> ultimasNotificacoes = new ArrayList<>();
+
     private boolean mensal;
 
-    @OneToOne(mappedBy = "caixinha", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "caixinha", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected Grupo grupo;
 
     protected Caixinha(EstrategiaNotificacaoEnum notificador, EstrategiaEstornoEnum estorno, BigDecimal valorTotal,
@@ -89,14 +93,14 @@ public class Caixinha {
         lancamentos.add(novoLancamento);
     }
 
-    public List<Notificacoes> notificar(String mensagem) {
-
-        return getNotificador().notificar(mensagem, grupo.getParticipantes());
+    public void notificar(String mensagem) {
+        ultimasNotificacoes.addAll(getNotificador().notificar(mensagem, this.grupo.getParticipantes()));
 
     }
 
     public void realizarEstorno() {
         getEstorno().calcularExtorno(this);
+
     }
 
     public void setId(Long id) {
@@ -155,6 +159,15 @@ public class Caixinha {
 
     public boolean isMensal() {
         return mensal;
+    }
+
+    public List<Notificacoes> getUltimasNotificacoes() {
+        List<Notificacoes> notificacoes = new ArrayList<>();
+        ultimasNotificacoes.forEach(x -> notificacoes.add(x));
+
+        ultimasNotificacoes.clear();
+
+        return notificacoes;
     }
 
     public void setGrupo(Grupo grupo) {

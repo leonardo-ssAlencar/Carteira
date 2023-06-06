@@ -25,7 +25,7 @@ public class CaixinhaBuilder {
     public CaixinhaBuilder() {
         valorTotal = new BigDecimal(0);
         fechamento = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
-        mensal = false;
+        mensal = true;
         meta = null;
         lancamentoEstrategy = LancamentoEstrategyEnum.LANCAMENTO_SIMPLES;
         notificador = EstrategiaNotificacaoEnum.NOTIFICADOR_SIMPLES;

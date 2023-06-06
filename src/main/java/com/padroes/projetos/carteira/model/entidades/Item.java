@@ -19,8 +19,10 @@ public class Item {
     private Long id;
     @Column(length = 50)
     private String nome;
-    private short prestacoes;
-    private short quantidade;
+    @Column(columnDefinition = "SMALLINT")
+    private int prestacoes;
+    @Column(columnDefinition = "SMALLINT")
+    private int quantidade;
     @Column(length = 100)
     private String descricao;
     @Column(precision = 10, scale = 2)
@@ -31,7 +33,7 @@ public class Item {
     public Item() {
     };
 
-    public Item(String nome, short prestacoes, short quantidade, String descricao,
+    public Item(String nome, int prestacoes, int quantidade, String descricao,
             BigDecimal valor) {
         this.nome = nome;
         this.prestacoes = prestacoes;
@@ -56,19 +58,19 @@ public class Item {
         this.nome = nome;
     }
 
-    public short getPrestacoes() {
+    public int getPrestacoes() {
         return prestacoes;
     }
 
-    public void setPrestacoes(short prestacoes) {
+    public void setPrestacoes(int prestacoes) {
         this.prestacoes = prestacoes;
     }
 
-    public short getQuantidade() {
+    public int getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(short quantidade) {
+    public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
 
@@ -78,6 +80,10 @@ public class Item {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public void setCaixinha(Caixinha caixinha) {
+        this.caixinha = caixinha;
     }
 
     public BigDecimal getValor() {

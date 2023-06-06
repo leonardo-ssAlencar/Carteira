@@ -1,7 +1,6 @@
 package com.padroes.projetos.carteira.model.entidades.estrategiaEstorno;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 
@@ -15,9 +14,11 @@ public class EstornoSimples implements EstrategiaEstorno {
 
         valorTotal = valorTotal.divide(new BigDecimal(usuarios));
 
-        caixinha.notificar("O valor da caixinha " + caixinha.getGrupo().getNome() + " para cada um no mês "
-                + LocalDate.now().getMonth() + " foi de "
-                + valorTotal + " R$");
+        String mensagem = "O valor da caixinha " + caixinha.getGrupo().getNome() + " para o mes "
+                + caixinha.getFechamento().getMonthValue() + " foi de "
+                + valorTotal + " R$";
+
+        caixinha.notificar(mensagem);
 
     }
 

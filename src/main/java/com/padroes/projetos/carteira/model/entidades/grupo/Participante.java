@@ -19,7 +19,7 @@ public class Participante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private GrupoComponent componente;
     private boolean eAdmin;
     @ManyToOne

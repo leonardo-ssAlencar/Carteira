@@ -1,5 +1,6 @@
 package com.padroes.projetos.carteira.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.padroes.projetos.carteira.model.entidades.Notificacoes;
-import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
-import com.padroes.projetos.carteira.model.entidades.caixinha.CaixinhaBuilder;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
+import com.padroes.projetos.carteira.model.entidades.grupo.GrupoComponent;
 import com.padroes.projetos.carteira.model.entidades.grupo.GrupoFachada;
 import com.padroes.projetos.carteira.model.entidades.grupo.Participante;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
 import com.padroes.projetos.carteira.model.excecoes.EntidadeNaoCadastradaException;
+import com.padroes.projetos.carteira.model.excecoes.UsuarioNaoExisteException;
 import com.padroes.projetos.carteira.repository.RepositorioCaixinha;
 import com.padroes.projetos.carteira.repository.RepositorioGrupo;
 import com.padroes.projetos.carteira.repository.RepositorioLancamento;
@@ -54,13 +55,6 @@ public class AplicacaoFachada {
 
         Grupo grupo = fachada.criarGrupoUsuario(usuario);
 
-        CaixinhaBuilder builder = new CaixinhaBuilder();
-
-        Caixinha caixinha = builder.build();
-        grupo.setCaixinha(caixinha);
-
-        caixinhaRepo.save(caixinha);
-
         grupoRepo.save(grupo);
 
         return usuarioRepo.save(usuario);
@@ -74,21 +68,9 @@ public class AplicacaoFachada {
      */
     public Grupo cadastrarGrupo(Grupo grupo) {
 
-        Optional<Usuario> user = usuarioRepo.findById(grupo.getDono().getId());
-
-        if (user.isEmpty()) {
-
-            throw new EntidadeNaoCadastradaException("O usuario em questão nao existe");
-        }
-
         caixinhaRepo.save(grupo.getCaixinha());
 
         grupo = grupoRepo.save(grupo);
-        Participante participante = new Participante(grupo);
-        participante.setGrupo((Grupo) user.get().getParente());
-
-        participanteRepo.save(participante);
-
         return grupo;
 
     }
@@ -103,6 +85,7 @@ public class AplicacaoFachada {
 
     public Optional<Usuario> validarUsuario(String email, String senha) {
 
+        System.out.println("Pikles");
         Optional<Usuario> userOpt = usuarioRepo.findOneByEmail(email);
 
         if (userOpt.isPresent()) {
@@ -149,7 +132,6 @@ public class AplicacaoFachada {
      */
     public Participante cadastrarParticipante(Participante participante, Grupo grupo) {
 
-        grupo.setParticipantes(participante.getParticipante());
         participante.setGrupo(grupo);
 
         return participanteRepo.save(participante);
@@ -177,6 +159,48 @@ public class AplicacaoFachada {
 
         notificacaoRepo.saveAll(notificacoes);
 
+    }
+
+    public List<BigDecimal> valorLancamentos(GrupoComponent grupoComp) {
+
+        if (grupoComp instanceof Usuario) {
+            return lancamentoRepo.valoresLancamentos((Usuario) grupoComp);
+        }
+        Grupo grupo = (Grupo) grupoComp;
+        return lancamentoRepo.valoresLancamentos(grupo.getCaixinha());
+
+    }
+
+    public List<Participante> participantes(Grupo grupoUser) {
+        return participanteRepo.participantes(grupoUser);
+    }
+
+    public Participante participante(Usuario user) {
+
+        Optional<Participante> participante = participanteRepo.findById(user.getId());
+
+        if (participante.isEmpty()) {
+            throw new UsuarioNaoExisteException("O usuario não está nesse grupo!!!");
+
+        }
+
+        return participante.get();
+
+    }
+
+    public List<Lancamento> lancamentos(GrupoComponent grupoComp) {
+
+        if (grupoComp instanceof Usuario) {
+            return lancamentoRepo.lancamentos((Usuario) grupoComp);
+        }
+        Grupo grupo = (Grupo) grupoComp;
+        return lancamentoRepo.lancamentos(grupo.getCaixinha());
+
+    }
+
+    public void caixinha(Grupo grupo) {
+
+        caixinhaRepo.findById(grupo.getCaixinha().getId());
     }
 
 }

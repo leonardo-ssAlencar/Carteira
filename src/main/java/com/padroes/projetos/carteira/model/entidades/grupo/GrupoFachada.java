@@ -32,15 +32,17 @@ public class GrupoFachada {
      * @return Grupo um novo grupo
      */
     public Grupo criarGrupo(String nome, Usuario dono) {
+        // Crio o grupo
         Grupo grupo = new Grupo();
+        // Adiciono o dono
         grupo.setDono(dono);
+        // adiciono o nome
         grupo.setNome(nome);
+        // seta o parente como o grupo
         grupo.parente = (dono.getParente());
+        // adiciono o dono e torno ele um usuario
         grupo.setParticipantes(dono);
         grupo.tornarAdmin((Usuario) dono);
-
-        Grupo rootGrupo = (Grupo) dono.getParente();
-        rootGrupo.setParticipantes(grupo);
 
         return grupo;
 

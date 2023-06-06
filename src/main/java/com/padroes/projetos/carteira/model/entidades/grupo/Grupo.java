@@ -8,6 +8,7 @@ import java.util.Set;
 import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 import com.padroes.projetos.carteira.model.excecoes.OperacaoNaoPermitidaException;
+import com.padroes.projetos.carteira.model.excecoes.UsuarioNaoExisteException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -24,7 +25,7 @@ public final class Grupo extends GrupoComponent {
     @OneToOne
     private Usuario dono;
     // Lista dos participantes do grupo
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "grupo", cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "grupo", cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     private Set<Participante> participantes = new HashSet<>();
     // A Caixinha do grupo
     @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE })
@@ -55,7 +56,7 @@ public final class Grupo extends GrupoComponent {
         if (usuarioGrupo.isPresent()) {
             usuarioGrupo.get().notificar(mensagen);
         } else {
-            // TODO CRIAR UMA EXCESSÃO
+            throw new UsuarioNaoExisteException("O usuario " + user.getNome() + " não existe");
         }
 
     }

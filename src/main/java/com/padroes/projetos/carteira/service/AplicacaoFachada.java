@@ -85,8 +85,6 @@ public class AplicacaoFachada {
      */
 
     public Optional<Usuario> validarUsuario(String email, String senha) {
-
-        System.out.println("Pikles");
         Optional<Usuario> userOpt = usuarioRepo.findOneByEmail(email);
 
         if (userOpt.isPresent()) {

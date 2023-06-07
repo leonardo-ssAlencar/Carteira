@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.com">
 
 <head>
   <title>Carteira Coletiva</title>
-  <link rel="stylesheet" type="text/css" href="css/style2.css">
+  <link rel="stylesheet" type="text/css" th:href="@{styles/style2.css}">
 </head>
 
 <body>
   <div class="container">
-    <h1>Carteira Coletiva</h1>
+    <h1 th:text="${user.getNome}">Carteira Coletiva</h1>
     <div class="wallet-info">
       <div class="balance">
         <span class="label">Saldo Total:</span>
-        <span class="value">$1,500.00</span>
+        <span class="value" th:text="${valorTotal}">$1,500.00</span>
       </div>
       <div class="members">
         <span class="label">Membros:</span>
-        <ul class="member-list">
-          <li>Usuário 1</li>
-          <li>Usuário 2</li>
-          <li>Usuário 3</li>
+        <ul class="member-list" th:each="participante : ${participantes}">
+          <a th:href="@{grupo/{id}(id=${participante.getParticipante.getId})}">
+            <li th:text="${participante.getParticipante.getNome}">Usuário 1
+            </li>
+          </a>
         </ul>
       </div>
     </div>
@@ -28,26 +29,18 @@
       <table>
         <thead>
           <tr>
+            <th>Status</th>
             <th>Data</th>
             <th>Descrição</th>
             <th>Valor</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody th:each="lancamento : ${lancamentos}">
           <tr>
-            <td>10/05/2023</td>
-            <td>Compra de alimentos</td>
-            <td>$50.00</td>
-          </tr>
-          <tr>
-            <td>05/05/2023</td>
-            <td>Pagamento de aluguel</td>
-            <td>$800.00</td>
-          </tr>
-          <tr>
-            <td>01/05/2023</td>
-            <td>Transferência para usuário 2</td>
-            <td>$200.00</td>
+            <td th:text="${lancamento.estado}">PROCESSADO</td>
+            <td th:text="${lancamento.dataHora}">10/05/2023</td>
+            <td th:text="${lancamento.mensagem}">Compra de alimentos</td>
+            <td th:text="${lancamento.valor}">$50.00</td>
           </tr>
         </tbody>
       </table>

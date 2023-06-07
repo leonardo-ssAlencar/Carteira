@@ -3,8 +3,6 @@ package com.padroes.projetos.carteira;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.boot.WebApplicationType;
@@ -17,23 +15,17 @@ import com.padroes.projetos.carteira.model.entidades.commands.CreditoCommand;
 import com.padroes.projetos.carteira.model.entidades.commands.DebitoCommand;
 import com.padroes.projetos.carteira.model.entidades.commands.LancamentoCommand;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
-import com.padroes.projetos.carteira.model.entidades.grupo.GrupoComponent;
 import com.padroes.projetos.carteira.model.entidades.grupo.GrupoFachada;
 import com.padroes.projetos.carteira.model.entidades.grupo.Participante;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
-import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
 import com.padroes.projetos.carteira.model.entidades.lancamento.LancamentoSemItemsFactory;
-import com.padroes.projetos.carteira.model.enums.OperacoesEnum;
 import com.padroes.projetos.carteira.service.AplicacaoFachada;
 
 public class TerminalApp {
     private static AplicacaoFachada fachada;
     private static ApplicationContext context;
-    private static Scanner sc;
 
     private static GrupoFachada grupoFachada;
-    private static Usuario userLogado;
-    private static Grupo grupoUser;
 
     public static void limparBuffer(Scanner cScanner) {
         if (cScanner.hasNextLine()) {
@@ -49,293 +41,297 @@ public class TerminalApp {
         fachada = context.getBean(AplicacaoFachada.class);
         grupoFachada = context.getBean(GrupoFachada.class);
 
-        sc = new Scanner(System.in);
-
         inicializarBanco();
-        short opcao = 0;
-        boolean loop = true;
 
-        do {
+        // // short opcao = 0;
+        // // boolean loop = true;
 
-            System.out.println("Digite:\n1 - Login\n2 - Cadastrar\n -- Escolha: ");
-            opcao = sc.nextShort();
+        // // do {
 
-            limparBuffer(sc);
+        // // System.out.println("Digite:\n1 - Login\n2 - Cadastrar\n -- Escolha: ");
+        // // opcao = sc.nextShort();
 
-            switch (opcao) {
+        // // limparBuffer(sc);
 
-                case 1:
-                    loginTela();
-                    break;
+        // // switch (opcao) {
 
-                case 2:
-                    cadastroTela();
-                    break;
+        // // case 1:
+        // // loginTela();
+        // // break;
 
-                default:
-                    loop = false;
-                    break;
+        // // case 2:
+        // // cadastroTela();
+        // // break;
 
-            }
+        // // default:
+        // // loop = false;
+        // // break;
 
-        } while (loop);
+        // // }
 
-    }
-
-    public static void loginTela() {
-
-        System.out.println("---------- LOGIN: ----------\n\n");
-        System.out.print("Email: ");
-        String email = sc.nextLine();
-
-        System.out.print("Senha: ");
-        String senha = sc.nextLine();
-
-        // Login do Usuario INICIO
-        Optional<Usuario> user = fachada.validarUsuario(email, senha);
-
-        if (user.isPresent()) {
-            userLogado = user.get();
-            grupoUser = (Grupo) userLogado.getParente();
-            telaUsuario();
-            return;
-        }
-        // FIM
-
-        System.out.println("Usuario não existe ou senha incorreta");
-    }
-
-    public static void cadastroTela() {
-
-        System.out.println("---------- CADASTRO: ----------\n\n");
-        System.out.print("Nome: ");
-        String nome = sc.nextLine();
-
-        System.out.println("Telefone: ");
-        String tel = sc.nextLine();
-
-        System.out.print("Email: ");
-        String email = sc.nextLine();
-
-        System.out.print("Senha: ");
-        String senha = sc.nextLine();
-
-        fachada.cadastrarUsuario(new Usuario(nome, tel, email, senha));
+        // // } while (loop);
 
     }
 
-    // Pode pegar esse metodo para calcular o saldo tanto na tela do usuario quanto
-    // na do grupo
-    public static BigDecimal calcularSaldo(GrupoComponent grupoComponent) {
-        List<BigDecimal> lancamentos = fachada.valorLancamentos(userLogado);
-        BigDecimal valor = new BigDecimal(0);
+    // public static void loginTela() {
 
-        if (lancamentos != null) {
-            valor = lancamentos.stream().reduce((x, y) -> x.add(y)).orElse(valor);
-        }
+    // System.out.println("---------- LOGIN: ----------\n\n");
+    // System.out.print("Email: ");
+    // String email = sc.nextLine();
 
-        return valor;
+    // System.out.print("Senha: ");
+    // String senha = sc.nextLine();
 
-    }
+    // // Login do Usuario INICIO
+    // Optional<Usuario> user = fachada.validarUsuario(email, senha);
 
-    public static void telaUsuario() {
-        short opcao = 0;
-        BigDecimal valor = calcularSaldo(userLogado);
+    // if (user.isPresent()) {
+    // userLogado = user.get();
+    // grupoUser = (Grupo) userLogado.getParente();
+    // telaUsuario();
+    // return;
+    // }
+    // // FIM
 
-        do {
+    // System.out.println("Usuario não existe ou senha incorreta");
+    // }
 
-            System.out.println("Ola " + userLogado.getNome() + " ------- " + "Saldo: " + valor);
-            System.out.print("Digite:\n1 - Listar grupos\n2 - Cadastrar Grupo\n3 - ver seus lancamentos\nOpcao: ");
-            opcao = sc.nextShort();
+    // public static void cadastroTela() {
 
-            limparBuffer(sc);
+    // System.out.println("---------- CADASTRO: ----------\n\n");
+    // System.out.print("Nome: ");
+    // String nome = sc.nextLine();
 
-            switch (opcao) {
-                case 1:
-                    listaGruposTela();
+    // System.out.println("Telefone: ");
+    // String tel = sc.nextLine();
 
-                    break;
-                case 2:
-                    cadastroGrupoTela();
-                    break;
+    // System.out.print("Email: ");
+    // String email = sc.nextLine();
 
-                case 3:
-                    listarLancamentosTela(userLogado);
-                    break;
+    // System.out.print("Senha: ");
+    // String senha = sc.nextLine();
 
-                default:
-                    break;
-            }
+    // fachada.cadastrarUsuario(new Usuario(nome, tel, email, senha));
 
-        } while (opcao != 0);
+    // }
 
-    }
+    // // Pode pegar esse metodo para calcular o saldo tanto na tela do usuario
+    // quanto
+    // // na do grupo
+    // public static BigDecimal calcularSaldo(GrupoComponent grupoComponent) {
+    // List<BigDecimal> lancamentos = fachada.valorLancamentos(userLogado);
+    // BigDecimal valor = new BigDecimal(0);
 
-    public static void cadastroGrupoTela() {
+    // if (lancamentos != null) {
+    // valor = lancamentos.stream().reduce((x, y) -> x.add(y)).orElse(valor);
+    // }
 
-        System.out.println("CADASTRAR GRUPO");
+    // return valor;
 
-        System.out.println("Nome: ");
-        String nome = sc.nextLine();
+    // }
 
-        Grupo grupo = grupoFachada.criarGrupo(nome, userLogado);
-        CaixinhaBuilder builder = new CaixinhaBuilder();
+    // public static void telaUsuario() {
+    // short opcao = 0;
+    // BigDecimal valor = calcularSaldo(userLogado);
 
-        grupo.setCaixinha(builder.build());
+    // do {
 
-        grupo = fachada.cadastrarGrupo(grupo);
-        fachada.cadastrarParticipante(new Participante(grupo), grupoUser);
+    // System.out.println("Ola " + userLogado.getNome() + " ------- " + "Saldo: " +
+    // valor);
+    // System.out.print("Digite:\n1 - Listar grupos\n2 - Cadastrar Grupo\n3 - ver
+    // seus lancamentos\nOpcao: ");
+    // opcao = sc.nextShort();
 
-    }
+    // limparBuffer(sc);
 
-    // Criar a caixinha é só pegar esses valores
-    public static void caixinhaConfig(Grupo grupo) {
+    // switch (opcao) {
+    // case 1:
+    // listaGruposTela();
 
-        CaixinhaBuilder builder = new CaixinhaBuilder();
+    // break;
+    // case 2:
+    // cadastroGrupoTela();
+    // break;
 
-        grupo.setCaixinha(builder.build());
+    // case 3:
+    // listarLancamentosTela(userLogado);
+    // break;
 
-    }
+    // default:
+    // break;
+    // }
 
-    public static void listarLancamentosTela(GrupoComponent component) {
-        List<Lancamento> lancamentos = fachada.lancamentos(component);
+    // } while (opcao != 0);
 
-        System.out.println("\n\nLANCAMENTOS:\n\n");
+    // }
 
-        lancamentos.forEach(System.out::println);
+    // public static void cadastroGrupoTela() {
 
-    }
+    // System.out.println("CADASTRAR GRUPO");
 
-    public static void listaGruposTela() {
+    // System.out.println("Nome: ");
+    // String nome = sc.nextLine();
 
-        System.out.println("\n GRUPOS: \n");
+    // Grupo grupo = grupoFachada.criarGrupo(nome, userLogado);
+    // CaixinhaBuilder builder = new CaixinhaBuilder();
 
-        // Puxar os participantes para mostrar na tela
-        List<Participante> participantes = fachada.participantes(grupoUser);
-        int x = 1;
+    // grupo.setCaixinha(builder.build());
 
-        System.out.println("Para entrar digite o numero do grupo.");
-        for (Participante p : participantes) {
-            System.out.println(
-                    "id = " + x++ + " Grupo = " + p.getParticipante().getNome());
-        }
+    // grupo = fachada.cadastrarGrupo(grupo);
+    // fachada.cadastrarParticipante(new Participante(grupo), grupoUser);
 
-        System.out.print("Para sair digite -1\nOpcao: ");
-        short valor = sc.nextShort();
-        limparBuffer(sc);
+    // }
 
-        if (valor > 0 && valor <= participantes.size()) {
-            telaGrupo(participantes.get(valor - 1).getParticipante().getId());
-            return;
-        }
+    // // Criar a caixinha é só pegar esses valores
+    // public static void caixinhaConfig(Grupo grupo) {
 
-    }
+    // CaixinhaBuilder builder = new CaixinhaBuilder();
 
-    public static void telaGrupo(Long id) {
+    // grupo.setCaixinha(builder.build());
 
-        Grupo grupo = fachada.buscarGrupo(id);
+    // }
 
-        BigDecimal saldo = calcularSaldo(grupo);
-        short opcao = 0;
+    // public static void listarLancamentosTela(GrupoComponent component) {
+    // List<Lancamento> lancamentos = fachada.lancamentos(component);
 
-        int x = 1;
-        StringBuilder sBuilder = new StringBuilder();
-        sBuilder.append("Digite:\n")
-                .append(x++ + " - Fazer lancamento\n")
-                .append(x++ + " - Listar lancamentos\n")
-                .append(x++ + " - Listar Participantes\n")
-                .append(x++ + " - Adicionar Participante\n");
+    // System.out.println("\n\nLANCAMENTOS:\n\n");
 
-        do {
-            System.out.println(grupo.getNome() + "----------" + "saldo: " + saldo);
+    // lancamentos.forEach(System.out::println);
 
-            System.out.print(sBuilder.toString());
-            System.out.print("Ou digite 0 para sair\nOpcao: ");
-            opcao = sc.nextShort();
-            limparBuffer(sc);
+    // }
 
-            switch (opcao) {
-                case 1:
-                    cadastroLancamentoTela(grupo);
-                    saldo = calcularSaldo(grupo);
-                    break;
-                case 2:
-                    listarLancamentosTela(grupo);
-                    break;
-                case 3:
-                    listaParticipantes(grupo);
-                    break;
-                case 4:
-                    adicionarParticipante(grupo);
-                    break;
+    // public static void listaGruposTela() {
 
-            }
+    // System.out.println("\n GRUPOS: \n");
 
-        } while (opcao != 0);
+    // // Puxar os participantes para mostrar na tela
+    // List<Participante> participantes = fachada.participantes(grupoUser);
+    // int x = 1;
 
-    }
+    // System.out.println("Para entrar digite o numero do grupo.");
+    // for (Participante p : participantes) {
+    // System.out.println(
+    // "id = " + x++ + " Grupo = " + p.getParticipante().getNome());
+    // }
 
-    public static void listaParticipantes(Grupo grupo) {
+    // System.out.print("Para sair digite -1\nOpcao: ");
+    // short valor = sc.nextShort();
+    // limparBuffer(sc);
 
-        System.out.println("--------- PARTICIPANTES: --------- ");
-        List<Participante> participantes = fachada.participantes(grupo);
+    // if (valor > 0 && valor <= participantes.size()) {
+    // telaGrupo(participantes.get(valor - 1).getParticipante().getId());
+    // return;
+    // }
 
-        participantes.forEach(System.out::println);
+    // }
 
-        System.out.println();
+    // public static void telaGrupo(Long id) {
 
-    }
+    // Grupo grupo = fachada.buscarGrupo(id);
 
-    public static void adicionarParticipante(Grupo grupo) {
+    // BigDecimal saldo = calcularSaldo(grupo);
+    // short opcao = 0;
 
-        System.out.println("--------- ADD PARTICIPANTE: --------- ");
+    // int x = 1;
+    // StringBuilder sBuilder = new StringBuilder();
+    // sBuilder.append("Digite:\n")
+    // .append(x++ + " - Fazer lancamento\n")
+    // .append(x++ + " - Listar lancamentos\n")
+    // .append(x++ + " - Listar Participantes\n")
+    // .append(x++ + " - Adicionar Participante\n");
 
-        System.out.print("Digite o email:");
-        String email = sc.nextLine();
-        Participante participante = fachada.buscarUsuario(email);
+    // do {
+    // System.out.println(grupo.getNome() + "----------" + "saldo: " + saldo);
 
-        fachada.cadastrarParticipante(participante, grupo);
+    // System.out.print(sBuilder.toString());
+    // System.out.print("Ou digite 0 para sair\nOpcao: ");
+    // opcao = sc.nextShort();
+    // limparBuffer(sc);
 
-    }
+    // switch (opcao) {
+    // case 1:
+    // cadastroLancamentoTela(grupo);
+    // saldo = calcularSaldo(grupo);
+    // break;
+    // case 2:
+    // listarLancamentosTela(grupo);
+    // break;
+    // case 3:
+    // listaParticipantes(grupo);
+    // break;
+    // case 4:
+    // adicionarParticipante(grupo);
+    // break;
 
-    public static void cadastroLancamentoTela(Grupo grupo) {
+    // }
 
-        grupo.setCaixinha(fachada.caixinha(grupo));
-        System.out.println("FAZER LANCAMENTO: ");
+    // } while (opcao != 0);
 
-        System.out.print("Descricao:");
-        String desc = sc.nextLine();
+    // }
 
-        System.out.print("Valor:");
-        BigDecimal valor = sc.nextBigDecimal();
+    // public static void listaParticipantes(Grupo grupo) {
 
-        int x = 0;
+    // System.out.println("--------- PARTICIPANTES: --------- ");
+    // List<Participante> participantes = fachada.participantes(grupo);
 
-        OperacoesEnum valores[] = OperacoesEnum.values();
+    // participantes.forEach(System.out::println);
 
-        for (OperacoesEnum val : valores) {
+    // System.out.println();
 
-            System.out.println(x + " " + val);
-        }
+    // }
 
-        System.out.print("Selecione a operacao: ");
-        int opcao = sc.nextInt();
+    // public static void adicionarParticipante(Grupo grupo) {
 
-        limparBuffer(sc);
+    // System.out.println("--------- ADD PARTICIPANTE: --------- ");
 
-        LancamentoCommand command;
+    // System.out.print("Digite o email:");
+    // String email = sc.nextLine();
+    // Participante participante = fachada.buscarUsuario(email);
 
-        if (valores[opcao] == OperacoesEnum.DEBITO) {
-            command = new DebitoCommand(grupo, valor, userLogado, desc, new LancamentoSemItemsFactory());
-        } else {
-            command = new CreditoCommand(grupo, valor, userLogado, desc, new LancamentoSemItemsFactory());
-        }
+    // fachada.cadastrarParticipante(participante, grupo);
 
-        command.executar();
+    // }
 
-        fachada.salvarLancamento(command.getLancamento());
+    // public static void cadastroLancamentoTela(Grupo grupo) {
 
-    }
+    // grupo.setCaixinha(fachada.caixinha(grupo));
+    // System.out.println("FAZER LANCAMENTO: ");
+
+    // System.out.print("Descricao:");
+    // String desc = sc.nextLine();
+
+    // System.out.print("Valor:");
+    // BigDecimal valor = sc.nextBigDecimal();
+
+    // int x = 0;
+
+    // OperacoesEnum valores[] = OperacoesEnum.values();
+
+    // for (OperacoesEnum val : valores) {
+
+    // System.out.println(x + " " + val);
+    // }
+
+    // System.out.print("Selecione a operacao: ");
+    // int opcao = sc.nextInt();
+
+    // limparBuffer(sc);
+
+    // LancamentoCommand command;
+
+    // if (valores[opcao] == OperacoesEnum.DEBITO) {
+    // command = new DebitoCommand(grupo, valor, userLogado, desc, new
+    // LancamentoSemItemsFactory());
+    // } else {
+    // command = new CreditoCommand(grupo, valor, userLogado, desc, new
+    // LancamentoSemItemsFactory());
+    // }
+
+    // command.executar();
+
+    // fachada.salvarLancamento(command.getLancamento());
+
+    // }
 
     public static void inicializarBanco() {
 

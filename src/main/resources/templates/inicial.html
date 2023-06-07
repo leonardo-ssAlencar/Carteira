@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <title>Carteira </title>
-  <link rel="stylesheet" type="text/css" href="css/style1.css">
+  <link th:href="@{/styles/style1.css}" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
     integrity="sha512-fyUEB/1anOie8imJqSsdBYzj6vHzQJmGKssS2k3hB7QhX46AALZxY30M4iqqapOW1H1Nl0WAwFmqzUluwjWXlA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -22,8 +22,8 @@
           <div class="right-panel">
             <h2>Carteira</h2>
             <div class="button-container">
-              <a href="cadastro.html"><button class="register-button" url="/cadastrar.html">Cadastrar</button></a>
-              <a href="login.html"><button class="login-button" url="/login.html">Entrar</button></a>
+              <a href="/cadastro"><button class="register-button" url="/cadastrar.html">Cadastrar</button></a>
+              <a href="/login"><button class="login-button" url="/login.html">Entrar</button></a>
             </div>
           </div>
         </div>

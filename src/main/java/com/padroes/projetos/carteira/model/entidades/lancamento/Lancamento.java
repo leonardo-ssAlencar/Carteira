@@ -2,6 +2,7 @@ package com.padroes.projetos.carteira.model.entidades.lancamento;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
@@ -90,6 +91,16 @@ public class Lancamento {
 
     public LocalDateTime getDataHoraLancamento() {
         return dataHoraLancamento;
+    }
+
+    public String dataHora() {
+        String formatador = "dd/MM/yyyy - HH:mm:ss";
+
+        return dataHoraLancamento.format(DateTimeFormatter.ofPattern(formatador));
+
+
+
+
     }
 
     public void setDataHoraLancamento(LocalDateTime dataHoraLancamento) {

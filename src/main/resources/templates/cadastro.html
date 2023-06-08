@@ -9,15 +9,19 @@
 <body>
   <div class="container">
     <h2>Cadastro</h2>
-    <form>
+    <form action="#" th:action="@{/realizarCadastro}" method="post" th:object="${user}">
       <label for="username">Nome de usuário</label>
-      <input type="text" id="username" name="username" placeholder="Digite seu nome de usuário" required>
+      <input type="text" id="username" name="username" th:field="*{nome}" placeholder="Digite seu nome de usuário"
+        required>
 
       <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="Digite seu email" required>
+      <input type="email" id="email" name="email" th:field="*{email}" placeholder="Digite seu email" required>
+
+      <label for="email">telefone</label>
+      <input type="tel" id="telefone" name="telefone" th:field="*{telefone}" placeholder="Digite seu email" required>
 
       <label for="password">Senha</label>
-      <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+      <input type="password" id="password" name="password" th:field="*{senha}" placeholder="Digite sua senha" required>
 
       <input type="submit" value="Cadastrar">
 

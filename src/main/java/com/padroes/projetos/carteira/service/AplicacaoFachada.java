@@ -110,6 +110,18 @@ public class AplicacaoFachada {
 
     }
 
+    public Usuario buscarUsuario(Long email) throws EntidadeNaoCadastradaException {
+
+        Optional<Usuario> user = usuarioRepo.findById(email);
+
+        if (user.isEmpty()) {
+            throw new EntidadeNaoCadastradaException("Não existe usuario com esse email");
+        }
+
+        return user.get();
+
+    }
+
     public Grupo buscarGrupo(Long id) throws EntidadeNaoCadastradaException {
 
         Optional<Grupo> grupo = grupoRepo.findById(id);
@@ -134,6 +146,12 @@ public class AplicacaoFachada {
         participante.setGrupo(grupo);
 
         return participanteRepo.save(participante);
+
+    }
+
+    public void deletarParticipante(Participante participante) {
+
+        participanteRepo.delete(participante);
 
     }
 
@@ -200,6 +218,24 @@ public class AplicacaoFachada {
     public Caixinha caixinha(Grupo grupo) {
 
         return caixinhaRepo.findById(grupo.getCaixinha().getId()).get();
+    }
+
+    public Participante buscarParticipante(Long id) {
+        Optional<Participante> participante = participanteRepo.findById(id);
+
+        if (participante.isEmpty()) {
+            throw new EntidadeNaoCadastradaException("O participante nao existe");
+
+        }
+
+        return participante.get();
+
+    }
+
+    public void salvarParticipante(Participante participante) {
+
+        participanteRepo.save(participante);
+
     }
 
 }

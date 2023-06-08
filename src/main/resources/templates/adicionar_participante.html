@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.com">
+
+<head>
+    <title>Adicionar Participante</title>
+    <link rel="stylesheet" type="text/css" href="/styles/sytle3.css">
+</head>
+
+<body>
+
+</body>
+<div class="container">
+    <h2>Novo Lançamento</h2>
+    <form class="transaction-form" action="#" th:action="@{/grupo/{id}/add_participante(id=${grupoId})}" method="post">
+        <div class="form-group">
+            <label for="description">Email:</label>
+            <input type="text" id="description" name="email" placeholder="Email do Usuario">
+        </div>
+        <button type="submit">Adicionar Participante</button>
+    </form>
+</div>
+
+
+</html>

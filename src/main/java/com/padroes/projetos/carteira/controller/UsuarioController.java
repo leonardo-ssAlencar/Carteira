@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.grupo.Participante;
@@ -43,6 +45,22 @@ public class UsuarioController {
         model.addAttribute("lancamentos", lancamentos);
 
         return "usuario";
+
+    }
+
+    @PostMapping("/realizarCadastro")
+    public String cadastro(HttpServletRequest request, @Param("user") Usuario user) {
+        user = fachada.cadastrarUsuario(user);
+
+        return "redirect:/";
+
+    }
+
+    @GetMapping("/sair")
+    public String sair(HttpServletRequest request) {
+        request.getSession().invalidate();
+
+        return "redirect:/";
 
     }
 

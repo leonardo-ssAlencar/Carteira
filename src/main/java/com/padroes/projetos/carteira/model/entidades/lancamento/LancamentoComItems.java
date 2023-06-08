@@ -38,9 +38,9 @@ public class LancamentoComItems extends Lancamento {
 
     @Override
     public Operacao getOperacao() {
-        if (operacao == OperacoesEnum.ADD_ITEMS) {
-            return new AdicionarItems(nItems);
-        }
+        // if (operacao == OperacoesEnum.ADD_ITEMS) {
+        // return new AdicionarItems(nItems);
+        // }
         return super.getOperacao();
     }
 

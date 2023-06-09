@@ -97,7 +97,7 @@ public class GrupoController {
 
     }
 
-    @GetMapping("/grupo/{id}/remover")
+    @GetMapping("/grupo/{id}/remover_grupo")
     public String deletarGrupo(HttpServletRequest request, @PathVariable("id") Long id) {
         Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
         if (user == null) {

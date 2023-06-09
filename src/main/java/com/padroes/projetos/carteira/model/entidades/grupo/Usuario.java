@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
@@ -16,6 +17,7 @@ import jakarta.persistence.Table;
 public final class Usuario extends GrupoComponent {
 
     private String telefone;
+    @Column(unique = true)
     private String email;
     private String senha;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")

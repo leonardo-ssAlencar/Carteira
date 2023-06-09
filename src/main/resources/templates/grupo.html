@@ -20,7 +20,7 @@
     </div>
     <h1 th:text="${grupo.nome}">Grupo 1</h1>
     <div class="container">
-      <div class="buttons-container">  
+      <div class="buttons-container">
         <a th:href="@{/grupo/{id}/novo_lancamento(id=${grupo.id})}"><button>Novo Lançamento</button></a>
         <span th:if="${userLogParticipante.eAdmin}">
           <a th:href="@{/grupo/{id}/add_participante(id=${grupo.id})}"><button>Adicionar Participante</button></a>
@@ -28,7 +28,7 @@
 
 
         <span th:if="${userLogParticipante.getParticipante.equals(grupo.dono)}">
-          <a th:href="@{/grupo/{id}/remover(id=${grupo.id})}"><button>Excluir grupo</button></a>
+          <a th:href="@{/grupo/{id}/remover_grupo(id=${grupo.id})}"><button>Excluir grupo</button></a>
         </span>
 
         <a th:href="@{/grupo/{id}/sair(id=${grupo.id})}"><button>Sair do Grupo</button></a></button>
@@ -51,9 +51,17 @@
               <td th:text="${participante.getParticipante.nome}">João</td>
               <td th:text="${participante.eAdmin} ? 'admin' : '' "> </td>
               <td th:if="${userLogParticipante.eAdmin}">
-                <a th:href="@{/grupo/{id}/remover_participante/{pId}(id=${grupo.id}, pId=${participante.id})}">Remover</a>
-                <a th:href="@{/grupo/{id}/tornar_administrador/{pId}(id=${grupo.id}, pId=${participante.id})}">
-                  <span th:text="${participante.eAdmin}? 'Retirar Admin' : 'Tornar Admin'"></span></a></button>
+                <a
+                  th:href="@{/grupo/{id}/remover_participante/{pId}(id=${grupo.id}, pId=${participante.id})}">Remover</a>
+
+                <span th:if="${participante.eAdmin}">
+                  <a th:href="@{/grupo/{id}/retirar_administrador/{pId}(id=${grupo.id}, pId=${participante.id})}">retirar
+                    Admin</a>
+                </span>
+                <span th:unless="${participante.eAdmin}">
+                  <a th:href="@{/grupo/{id}/tornar_administrador/{pId}(id=${grupo.id}, pId=${participante.id})}">Tornar
+                    Admin</a>
+                </span>
               </td>
             </tr>
 

@@ -19,4 +19,7 @@ public interface RepositorioParticipante extends JpaRepository<Participante, Lon
     @Query("FROM Participante WHERE grupo = :grupo AND componente = :usuario")
     public Optional<Participante> participantesGrupo(@Param("grupo") Grupo grupo, @Param("usuario") Usuario user);
 
+    @Query("FROM Participante WHERE grupo = :grupo AND componente = :usuario")
+    public Optional<Participante> participantesGrupo(@Param("grupo") Grupo grupo, @Param("usuario") Grupo user);
+
 }

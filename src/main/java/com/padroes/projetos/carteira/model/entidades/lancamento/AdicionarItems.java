@@ -25,6 +25,7 @@ public class AdicionarItems implements Operacao {
 
         }
 
+        items.size();
         return new BigDecimal(0);
     }
 

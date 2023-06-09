@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +47,7 @@ public class GrupoController {
         }
 
         if (userLogparticipante == null) {
-            return "redirec:/usuario";
+            return "redirect:/usuario";
 
         }
 
@@ -88,18 +87,26 @@ public class GrupoController {
         Participante participante = fachada.buscarUsuario(email);
         Grupo grupo = fachada.buscarGrupo(id);
 
-        fachada.cadastrarParticipante(participante, grupo);
+        fachada.cadastrarParticipante(participante.getParticipante(), grupo);
 
         return "redirect:/grupo/" + id;
 
     }
 
-    @DeleteMapping("/grupo/{id}/remover")
+    @GetMapping("/grupo/{id}/remover")
     public String deletarGrupo(HttpServletRequest request, @PathVariable("id") Long id) {
         Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
         if (user == null) {
             return "redirect:/";
         }
+        Grupo grupo = fachada.buscarGrupo(id);
+
+        Participante participante = fachada.participante(user, grupo);
+
+        Participante gParticipante = fachada.participante(grupo, participante.getGrupo());
+
+        fachada.deletarParticipante(participante);
+        fachada.deletarParticipante(gParticipante);
 
         return "redirect:/usuario";
     }
@@ -107,11 +114,20 @@ public class GrupoController {
     @GetMapping("/grupo/{id}/sair")
     public String sairDoGrupo(HttpServletRequest request, @PathVariable("id") Long id) {
         Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
+        Grupo grupoUser = (Grupo) request.getSession().getAttribute("grupoUser");
         if (user == null) {
             return "redirect:/";
         }
 
         Grupo grupo = fachada.buscarGrupo(id);
+
+        Participante participante = fachada.participante(user, grupo);
+        Participante gParticipante = fachada.participante(grupo, grupoUser);
+
+        fachada.deletarParticipante(participante);
+        fachada.deletarParticipante(gParticipante);
+
+        request.getSession().setAttribute("grupoUser", fachada.buscarGrupo(grupoUser.getId()));
 
         return "redirect:/usuario";
 

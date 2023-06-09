@@ -1,1 +1,0 @@
--- insert into usuario(nome, email, senha, telefone, parente_id )

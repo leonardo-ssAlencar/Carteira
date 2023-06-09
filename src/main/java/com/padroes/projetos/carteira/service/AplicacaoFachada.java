@@ -72,6 +72,9 @@ public class AplicacaoFachada {
         caixinhaRepo.save(grupo.getCaixinha());
 
         grupo = grupoRepo.save(grupo);
+
+        cadastrarParticipante(grupo.getDono(), grupo);
+
         return grupo;
 
     }
@@ -141,10 +144,17 @@ public class AplicacaoFachada {
      * @param grupo
      * @return
      */
-    public Participante cadastrarParticipante(Participante participante, Grupo grupo) {
+    public Participante cadastrarParticipante(GrupoComponent usuario, Grupo grupo) {
+
+        Participante participante = new Participante(usuario);
+
+        Grupo root = (Grupo) usuario.getParente();
 
         participante.setGrupo(grupo);
+        Participante gParticipante = new Participante(grupo);
+        gParticipante.setGrupo(root);
 
+        participanteRepo.save(gParticipante);
         return participanteRepo.save(participante);
 
     }
@@ -192,9 +202,15 @@ public class AplicacaoFachada {
         return participanteRepo.participantes(grupoUser);
     }
 
-    public Participante participante(Usuario user, Grupo grupo) {
+    public Participante participante(GrupoComponent user, Grupo grupo) {
 
-        Optional<Participante> participante = participanteRepo.participantesGrupo(grupo, user);
+        Optional<Participante> participante;
+        if (user instanceof Grupo) {
+            participante = participanteRepo.participantesGrupo(grupo, (Grupo) user);
+
+        } else {
+            participante = participanteRepo.participantesGrupo(grupo, (Usuario) user);
+        }
 
         if (participante.isEmpty()) {
             throw new UsuarioNaoExisteException("O usuario não está nesse grupo!!!");

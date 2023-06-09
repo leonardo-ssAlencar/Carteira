@@ -17,12 +17,12 @@
       </div>
       <div class="form-group">
         <label for="amount">Valor:</label>
-        <input type="text" id="amount" name="valor" placeholder="Valor do lançamento">
+        <input type="text" id="amount" name="valor" placeholder="Valor do lançamento" required>
       </div>
       <div class="form-group">
         <label for="grupo">Grupo:</label>
         <select id="grupo" name="grupo" disabled>
-          <option th:text="${grupo.id}" th:value="${grupo.id}">Grupo1</option>
+          <option th:text="${grupo.nome}" th:value="${grupo.id}">Grupo1</option>
         </select>
       </div>
       <div class="form-group">

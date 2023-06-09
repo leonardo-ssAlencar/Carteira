@@ -10,11 +10,11 @@
 
 </body>
 <div class="container">
-    <h2>Novo Lançamento</h2>
-    <form class="transaction-form" action="#" th:action="@{/grupo/{id}/add_participante(id=${grupoId})}" method="post">
+    <h2>Novo Participante</h2>
+    <form class="transaction-form" action="#" th:action="@{/grupo/{id}/add_participante(id=${grupoID})}" method="post">
         <div class="form-group">
-            <label for="description">Email:</label>
-            <input type="text" id="description" name="email" placeholder="Email do Usuario">
+            <label for="description">Nome:</label>
+            <input type="text" id="description" name="nome" placeholder="Nome do participante">
         </div>
         <button type="submit">Adicionar Participante</button>
     </form>

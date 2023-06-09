@@ -1,51 +1,92 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.com">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Carteira Coletiva</title>
+  <title>Meus Lançamentos</title>
   <link rel="stylesheet" type="text/css" th:href="@{styles/style2.css}">
+
 </head>
 
 <body>
   <div class="container">
-    <h1 th:text="${user.getNome}">Carteira Coletiva</h1>
-    <div class="wallet-info">
+    <div class="user-info">
+      <div class="user-name">
+        <span th:text="${nome}">Nome User</span>
+      </div>
       <div class="balance">
-        <span class="label">Saldo Total:</span>
-        <span class="value" th:text="${valorTotal}">$1,500.00</span>
+        <span class="label">Saldo:</span>
+        <span class="value" th:text="${saldo}">R$ 1,500.00</span>
       </div>
-      <div class="members">
-        <span class="label">Membros:</span>
-        <ul class="member-list" th:each="participante : ${participantes}">
-          <a th:href="@{grupo/{id}(id=${participante.getParticipante.getId})}">
-            <li th:text="${participante.getParticipante.getNome}">Usuário 1
-            </li>
-          </a>
-        </ul>
+      <div> <button class="buttons-container" >Sair</button></div>
+      <div class="user-icon"></div>
+    </div>
+    <h1>Meus Lançamentos</h1>
+    <div class="container">
+      <div class="buttons-container">
+        <a href="/novo_grupo"><button>Criar Grupo</button></a>
+        
+        
       </div>
-    </div>
-    <div class="transaction-history">
-      <h2>Histórico de Transações</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Status</th>
-            <th>Data</th>
-            <th>Descrição</th>
-            <th>Valor</th>
-          </tr>
-        </thead>
-        <tbody th:each="lancamento : ${lancamentos}">
-          <tr>
-            <td th:text="${lancamento.estado}">PROCESSADO</td>
-            <td th:text="${lancamento.dataHora}">10/05/2023</td>
-            <td th:text="${lancamento.mensagem}">Compra de alimentos</td>
-            <td th:text="${lancamento.valor}">$50.00</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+      <div class="groups-container">
+        <h3 class="text-center">Meus Grupos</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Nome do Grupo</th>
+              <th>Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="grupo" th:each="participante : ${participantes}">
+              <td th:href="@{grupo/{id}(id=${participante.getParticipante.getId})}">
+                <a th:text="${participante.getParticipante.getNome}" th:href="@{grupo/{id}(id=${participante.getParticipante.getId})}">Usuário 1
+                </a>
+              </td>
+              <th>R$500.00</th>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="transaction-history">
+        <h3 class="text-center">Meus Lançamentos</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Grupo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-color="red">17/05/2023</td>
+                <td>Compra de alimentos</td>
+                <td>R$50.00</td>
+                <td>Grupo 3</td>
+              </tr>
+              <tr>
+                <td data-color="green">19/05/2023</td>
+                <td>Pagamento do IPTU</td>
+                <td>R$500.00</td>
+                <td>Grupo 3</td>
+              </tr>
+              <tr>
+                <td data-color="yellow">20/05/2023</td>
+                <td>Pagamento conta de água</td>
+                <td>R$180.00</td>
+                <td>Grupo 2</td>
+              </tr>
+              <tr>
+                <td data-color="red">26/05/2023</td>
+                <td>Compra de alimentos para festa</td>
+                <td>R$150.00</td>
+                <td>Grupo 1</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
 </body>
 
 </html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.com">
+
+<head>
+    <title>Novo Grupo</title>
+    <link rel="stylesheet" type="text/css" href="/styles/sytle3.css">
+</head>
+
+<body>
+
+</body>
+<div class="container">
+    <h2>Novo Grupo</h2>
+    <form class="transaction-form" action="#" th:action="@{/novo_grupo}" method="post">
+        <div class="form-group">
+            <label for="description">Nome do Grupo:</label>
+            <input type="text" id="description" name="nomeGrupo" placeholder="Nome do participante">
+        </div>
+        <button type="submit">Criar Grupo</button>
+    </form>
+</div>
+
+
+</html>

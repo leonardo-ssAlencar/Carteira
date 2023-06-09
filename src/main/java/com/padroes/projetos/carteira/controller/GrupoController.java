@@ -1,12 +1,8 @@
 package com.padroes.projetos.carteira.controller;
 
-import java.lang.ProcessBuilder.Redirect;
 import java.math.BigDecimal;
 
-import javax.swing.GroupLayout.Group;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.padroes.projetos.carteira.model.entidades.caixinha.CaixinhaBuilder;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.grupo.GrupoFachada;
 import com.padroes.projetos.carteira.model.entidades.grupo.Participante;
@@ -141,7 +138,7 @@ public class GrupoController {
     }
 
     @GetMapping("/novo_grupo")
-    public String nGrupo(HttpServletRequest request){
+    public String nGrupo(HttpServletRequest request) {
         Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
         if (user == null) {
             return "redirect:/";
@@ -150,13 +147,16 @@ public class GrupoController {
     }
 
     @PostMapping("/novo_grupo")
-    public String novoGrupo(HttpServletRequest request,@RequestParam("nomeGrupo") String nomeGrupo){
+    public String novoGrupo(HttpServletRequest request, @RequestParam("nomeGrupo") String nomeGrupo) {
         Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
         if (user == null) {
             return "redirect:/";
         }
 
         Grupo grupo = gFachada.criarGrupo(nomeGrupo, user);
+        CaixinhaBuilder builder = new CaixinhaBuilder();
+
+        grupo.setCaixinha(builder.build());
 
         fachada.cadastrarGrupo(grupo);
         return "redirect:/usuario";

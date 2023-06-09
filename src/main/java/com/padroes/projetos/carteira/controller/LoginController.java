@@ -5,9 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
@@ -39,12 +37,12 @@ public class LoginController {
     }
 
     @GetMapping("/encerrarlogin")
-    public String encerrar(HttpServletRequest request, @PathVariable("id") Long id) {
+    public String encerrar(HttpServletRequest request) {
         Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
         if (user == null) {
             return "redirect:/";
         }
-        
+
         request.getSession().removeAttribute("userLogado");
         request.getSession().removeAttribute("grupoUser");
         return "redirect:/";

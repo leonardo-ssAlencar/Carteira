@@ -14,18 +14,20 @@
         <span th:text="${nome}">Nome User</span>
       </div>
       <div class="balance">
-        <span class="label">Saldo:</span>
-        <span class="value" th:text="${saldo}">R$ 1,500.00</span>
+        <span class="label">Nome: </label></span>
+        <span class="value" th:text="${user.nome}"></span>
+        <span class="label">Saldo: </span>
+        <span class="value" th:text="${valorTotal}">R$ 1,500.00</span>
       </div>
-      <div> <button class="buttons-container" >Sair</button></div>
+      <div> <a href="/encerrarlogin" class="buttons-container">Sair</button></div>
       <div class="user-icon"></div>
     </div>
     <h1>Meus Lançamentos</h1>
     <div class="container">
       <div class="buttons-container">
         <a href="/novo_grupo"><button>Criar Grupo</button></a>
-        
-        
+
+
       </div>
       <div class="groups-container">
         <h3 class="text-center">Meus Grupos</h3>
@@ -39,7 +41,8 @@
           <tbody>
             <tr class="grupo" th:each="participante : ${participantes}">
               <td th:href="@{grupo/{id}(id=${participante.getParticipante.getId})}">
-                <a th:text="${participante.getParticipante.getNome}" th:href="@{grupo/{id}(id=${participante.getParticipante.getId})}">Usuário 1
+                <a th:text="${participante.getParticipante.getNome}"
+                  th:href="@{grupo/{id}(id=${participante.getParticipante.getId})}">Usuário 1
                 </a>
               </td>
               <th>R$500.00</th>
@@ -60,29 +63,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td data-color="red">17/05/2023</td>
-                <td>Compra de alimentos</td>
-                <td>R$50.00</td>
-                <td>Grupo 3</td>
-              </tr>
-              <tr>
-                <td data-color="green">19/05/2023</td>
-                <td>Pagamento do IPTU</td>
-                <td>R$500.00</td>
-                <td>Grupo 3</td>
-              </tr>
-              <tr>
-                <td data-color="yellow">20/05/2023</td>
-                <td>Pagamento conta de água</td>
-                <td>R$180.00</td>
-                <td>Grupo 2</td>
-              </tr>
-              <tr>
-                <td data-color="red">26/05/2023</td>
-                <td>Compra de alimentos para festa</td>
-                <td>R$150.00</td>
-                <td>Grupo 1</td>
+              <tr th:each="lancamento : ${lancamentos}">
+                <td data-color="red" th:text="${lancamento.dataHora}">17/05/2023</td>
+                <td th:text="${lancamento.mensagem}">Compra de alimentos</td>
+                <td th:text="${lancamento.valor}">R$50.00</td>
+                <td th:text="${lancamento.caixinha.grupo.nome}">Grupo 3</td>
               </tr>
             </tbody>
           </table>

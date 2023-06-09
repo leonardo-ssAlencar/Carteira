@@ -15,6 +15,22 @@
   text-align: center;
 }
 
+.user-info .buttons-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: green;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, cursor 0.3s;
+  color: white;
+}
+
+
 .user-info::after {
   content: "";
   width: 50px;
@@ -188,7 +204,24 @@ tbody tr:hover {
   margin-right: 10px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, cursor 0.3s;
+  text-decoration: none;
+
 }
+
+.buttons-link {
+  background-color: green;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.buttons-link :hover{
+  background-color: grey;
+  color: white;
+  cursor: pointer;
+  text-decoration-color: white;
+}
+
 
 .groups {
   display: flex;

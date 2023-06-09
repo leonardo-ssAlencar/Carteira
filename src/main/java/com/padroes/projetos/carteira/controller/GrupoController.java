@@ -1,8 +1,12 @@
 package com.padroes.projetos.carteira.controller;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.math.BigDecimal;
 
+import javax.swing.GroupLayout.Group;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
+import com.padroes.projetos.carteira.model.entidades.grupo.GrupoFachada;
 import com.padroes.projetos.carteira.model.entidades.grupo.Participante;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
@@ -25,6 +30,8 @@ public class GrupoController {
     private AplicacaoFachada fachada;
     @Autowired
     private ControllerService service;
+    @Autowired
+    private GrupoFachada gFachada;
 
     @GetMapping("/grupo/{id}")
     public String grupo(HttpServletRequest request, Model model, @PathVariable("id") Long id) {
@@ -131,6 +138,28 @@ public class GrupoController {
 
         return "redirect:/usuario";
 
+    }
+
+    @GetMapping("/novo_grupo")
+    public String nGrupo(HttpServletRequest request){
+        Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
+        if (user == null) {
+            return "redirect:/";
+        }
+        return "novo_grupo";
+    }
+
+    @PostMapping("/novo_grupo")
+    public String novoGrupo(HttpServletRequest request,@RequestParam("nomeGrupo") String nomeGrupo){
+        Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
+        if (user == null) {
+            return "redirect:/";
+        }
+
+        Grupo grupo = gFachada.criarGrupo(nomeGrupo, user);
+
+        fachada.cadastrarGrupo(grupo);
+        return "redirect:/usuario";
     }
 
 }

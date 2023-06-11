@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
+
 @Service
 public class ControllerService {
 
@@ -16,6 +18,11 @@ public class ControllerService {
         }
 
         return valor;
+
+    }
+
+    public BigDecimal calcularLancamentosValorTotal(List<Lancamento> lancamento) {
+        return calcularValorTotal(lancamento.stream().map(Lancamento::getValor).toList());
 
     }
 

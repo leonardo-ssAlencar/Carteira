@@ -40,12 +40,12 @@
           </thead>
           <tbody>
             <tr class="grupo" th:each="participante : ${participantes}">
-              <td th:href="@{grupo/{id}(id=${participante.getParticipante.getId})}">
-                <a th:text="${participante.getParticipante.getNome}"
-                  th:href="@{grupo/{id}(id=${participante.getParticipante.getId})}">Usuário 1
+              <td th:href="@{grupo/{id}(id=${participante.getId})}">
+                <a th:text="${participante.getNome}" th:href="@{grupo/{id}(id=${participante.getId})}">Usuário 1
                 </a>
               </td>
-              <th>R$500.00</th>
+              <th th:text="${participante.caixinha.valorTotal}">
+                R$500.00</th>
             </tr>
 
           </tbody>

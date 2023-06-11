@@ -39,10 +39,19 @@ public class UsuarioController {
 
         BigDecimal valor = service.calcularValorTotal(lancamentos.stream().map(Lancamento::getValor).toList());
 
+        List<Grupo> pGrupos = participantes.stream().filter(Participante::eGrupo).map(x -> (Grupo) x.getParticipante())
+                .toList();
+
+        pGrupos.forEach(x -> {
+            BigDecimal valCaixinha = service.calcularLancamentosValorTotal(fachada.lancamentos(x));
+            x.getCaixinha().setValorTotal(valCaixinha);
+        });
+
         model.addAttribute("valorTotal", valor);
         model.addAttribute("user", user);
-        model.addAttribute("participantes", participantes);
+        model.addAttribute("participantes", pGrupos);
         model.addAttribute("lancamentos", lancamentos);
+        model.addAttribute("sevice", service);
 
         return "usuario";
 

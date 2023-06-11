@@ -2,6 +2,7 @@ package com.padroes.projetos.carteira.model.entidades.caixinha;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -200,5 +201,10 @@ public class Caixinha {
 
     public void setMensal(boolean mensal) {
         this.mensal = mensal;
+    }
+
+    public String dataDeFechamento() {
+        return fechamento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString();
+
     }
 }

@@ -18,7 +18,9 @@
       </div>
       <div class="user-icon"></div>
     </div>
-    <h1 th:text="${grupo.nome}">Grupo 1</h1>
+    <h1 th:text="${grupo.nome}">Grupo 1 </h1>
+    <h2>Data de Fechamento: <span th:text="${grupo.caixinha.dataDeFechamento}">Data</span></h2>
+
     <div class="container">
       <div class="buttons-container">
         <a th:href="@{/grupo/{id}/novo_lancamento(id=${grupo.id})}"><button>Novo Lançamento</button></a>

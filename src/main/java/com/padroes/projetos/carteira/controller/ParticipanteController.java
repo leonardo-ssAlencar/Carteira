@@ -2,9 +2,13 @@ package com.padroes.projetos.carteira.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.grupo.Participante;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
@@ -83,6 +87,41 @@ public class ParticipanteController {
         fachada.salvarParticipante(participante);
 
         return "redirect:/grupo/" + gId;
+    }
+
+    @GetMapping("/grupo/{id}/add_participante")
+    public String addParticipante(HttpServletRequest request, Model model, @PathVariable("id") Long id) {
+        Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
+        if (user == null) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("grupoId", id);
+
+        return "adicionar_participante";
+    }
+
+    @PostMapping("/grupo/{id}/add_participante")
+    public String addParticipante(HttpServletRequest request, @PathVariable("id") Long id,
+            @RequestParam("email") String email) {
+        Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
+        if (user == null) {
+            return "redirect:/";
+        }
+
+        Participante participante = fachada.buscarUsuario(email);
+        Grupo grupo = fachada.buscarGrupo(id);
+
+        fachada.cadastrarParticipante(participante.getParticipante(), grupo);
+
+        Notificacoes notificacoes = new Notificacoes("Bem vindo ao grupo: " + grupo.getNome());
+
+        participante.getParticipante().notificar(notificacoes);
+
+        fachada.salvarNotificacoes(notificacoes);
+
+        return "redirect:/grupo/" + id;
+
     }
 
 }

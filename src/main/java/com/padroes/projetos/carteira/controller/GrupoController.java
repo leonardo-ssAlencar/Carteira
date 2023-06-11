@@ -1,6 +1,9 @@
 package com.padroes.projetos.carteira.controller;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,35 +71,6 @@ public class GrupoController {
 
     }
 
-    @GetMapping("/grupo/{id}/add_participante")
-    public String addParticipante(HttpServletRequest request, Model model, @PathVariable("id") Long id) {
-        Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
-        if (user == null) {
-            return "redirect:/";
-        }
-
-        model.addAttribute("grupoId", id);
-
-        return "adicionar_participante";
-    }
-
-    @PostMapping("/grupo/{id}/add_participante")
-    public String addParticipante(HttpServletRequest request, @PathVariable("id") Long id,
-            @RequestParam("email") String email) {
-        Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
-        if (user == null) {
-            return "redirect:/";
-        }
-
-        Participante participante = fachada.buscarUsuario(email);
-        Grupo grupo = fachada.buscarGrupo(id);
-
-        fachada.cadastrarParticipante(participante.getParticipante(), grupo);
-
-        return "redirect:/grupo/" + id;
-
-    }
-
     @GetMapping("/grupo/{id}/remover_grupo")
     public String deletarGrupo(HttpServletRequest request, @PathVariable("id") Long id) {
         Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
@@ -105,12 +79,13 @@ public class GrupoController {
         }
         Grupo grupo = fachada.buscarGrupo(id);
 
-        Participante participante = fachada.participante(user, grupo);
+        List<Participante> participantes = fachada.participantes(grupo);
+        List<Lancamento> lancamentos = fachada.lancamentos(grupo);
 
-        Participante gParticipante = fachada.participante(grupo, participante.getGrupo());
+        fachada.deletarParticipantes(participantes);
+        fachada.deletarLancamentos(lancamentos);
 
-        fachada.deletarParticipante(participante);
-        fachada.deletarParticipante(gParticipante);
+        fachada.deletarGrupo(grupo);
 
         return "redirect:/usuario";
     }
@@ -147,7 +122,8 @@ public class GrupoController {
     }
 
     @PostMapping("/novo_grupo")
-    public String novoGrupo(HttpServletRequest request, @RequestParam("nomeGrupo") String nomeGrupo) {
+    public String novoGrupo(HttpServletRequest request, @RequestParam("nomeGrupo") String nomeGrupo,
+            @RequestParam("data") String data, @RequestParam("eMensal") Boolean eMensal) {
         Usuario user = (Usuario) request.getSession().getAttribute("userLogado");
         if (user == null) {
             return "redirect:/";
@@ -155,6 +131,14 @@ public class GrupoController {
 
         Grupo grupo = gFachada.criarGrupo(nomeGrupo, user);
         CaixinhaBuilder builder = new CaixinhaBuilder();
+
+        builder.eMensal(eMensal);
+
+        if (data.toLowerCase().equals("null")) {
+            LocalDate lData = LocalDate.parse(data, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            builder.fechamento(lData);
+
+        }
 
         grupo.setCaixinha(builder.build());
 

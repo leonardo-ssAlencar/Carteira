@@ -188,6 +188,12 @@ public class AplicacaoFachada {
 
     }
 
+    public void salvarNotificacoes(Notificacoes notificacoes) {
+
+        notificacaoRepo.save(notificacoes);
+
+    }
+
     public List<BigDecimal> valorLancamentos(GrupoComponent grupoComp) {
 
         if (grupoComp instanceof Usuario) {
@@ -248,10 +254,41 @@ public class AplicacaoFachada {
 
     }
 
+    public Participante participante(GrupoComponent component) {
+
+        Optional<Participante> p = participanteRepo.participante(component);
+
+        if (p.isEmpty()) {
+            throw new EntidadeNaoCadastradaException("O participante nao existe");
+        }
+
+        return p.get();
+
+    }
+
     public void salvarParticipante(Participante participante) {
 
         participanteRepo.save(participante);
 
+    }
+
+    public List<Notificacoes> notificacoes(Usuario user) {
+
+        return notificacaoRepo.notificacaoUsuario(user);
+
+    }
+
+    public void deletarParticipantes(List<Participante> participantes) {
+        participanteRepo.deleteAll(participantes);
+    }
+
+    public void deletarLancamentos(List<Lancamento> lancamentos) {
+        lancamentoRepo.deleteAll(lancamentos);
+
+    }
+
+    public void deletarGrupo(Grupo grupo) {
+        grupoRepo.delete(grupo);
     }
 
 }

@@ -168,7 +168,6 @@ tbody tr:hover {
 }
 
 
-
 .buttons-container button:hover {
   background-color: grey;
   color: white;
@@ -207,21 +206,6 @@ tbody tr:hover {
   text-decoration: none;
 
 }
-
-.buttons-link {
-  background-color: green;
-  color: white;
-  border-radius: 10px;
-  text-decoration: none;
-}
-
-.buttons-link :hover{
-  background-color: grey;
-  color: white;
-  cursor: pointer;
-  text-decoration-color: white;
-}
-
 
 .groups {
   display: flex;

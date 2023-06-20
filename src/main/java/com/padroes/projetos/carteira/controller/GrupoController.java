@@ -19,6 +19,8 @@ import com.padroes.projetos.carteira.model.entidades.grupo.GrupoFachada;
 import com.padroes.projetos.carteira.model.entidades.grupo.Participante;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
 import com.padroes.projetos.carteira.model.entidades.lancamento.Lancamento;
+import com.padroes.projetos.carteira.model.excecoes.DataAnteriorException;
+import com.padroes.projetos.carteira.model.excecoes.NomeNuloException;
 import com.padroes.projetos.carteira.service.AplicacaoFachada;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -100,6 +102,10 @@ public class GrupoController {
 
         Grupo grupo = fachada.buscarGrupo(id);
 
+        if (user == grupo.getDono()) {
+            return "redirect:/grupo/" + id + "/remover_grupo";
+        }
+
         Participante participante = fachada.participante(user, grupo);
         Participante gParticipante = fachada.participante(grupo, grupoUser);
 
@@ -129,13 +135,22 @@ public class GrupoController {
             return "redirect:/";
         }
 
+        if (nomeGrupo.equals("") || nomeGrupo == null) {
+            throw new NomeNuloException("O nome não pode ser nulo");
+
+        }
+
         Grupo grupo = gFachada.criarGrupo(nomeGrupo, user);
         CaixinhaBuilder builder = new CaixinhaBuilder();
 
         builder.eMensal(eMensal);
 
-        if (data.toLowerCase().equals("null")) {
+        if (!data.toLowerCase().equals("null")) {
             LocalDate lData = LocalDate.parse(data, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            if (lData.isBefore(LocalDate.now())) {
+                throw new DataAnteriorException("A data tem que ser numa data posterior");
+            }
             builder.fechamento(lData);
 
         }

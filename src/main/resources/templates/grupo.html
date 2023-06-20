@@ -52,7 +52,7 @@
             <tr th:each="participante : ${participantes}">
               <td th:text="${participante.getParticipante.nome}">João</td>
               <td th:text="${participante.eAdmin} ? 'admin' : '' "> </td>
-              <td th:if="${userLogParticipante.eAdmin}">
+              <td th:if="${userLogParticipante.eAdmin && participante.getParticipante != grupo.dono}">
                 <a
                   th:href="@{/grupo/{id}/remover_participante/{pId}(id=${grupo.id}, pId=${participante.id})}">Remover</a>
 

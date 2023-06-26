@@ -12,6 +12,7 @@ import com.padroes.projetos.carteira.model.entidades.Notificacoes;
 import com.padroes.projetos.carteira.model.entidades.grupo.Grupo;
 import com.padroes.projetos.carteira.model.entidades.grupo.Participante;
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
+import com.padroes.projetos.carteira.model.excecoes.EntidadeNaoCadastradaException;
 import com.padroes.projetos.carteira.model.excecoes.OperacaoNaoPermitidaException;
 import com.padroes.projetos.carteira.service.AplicacaoFachada;
 
@@ -86,6 +87,7 @@ public class ParticipanteController {
             throw new OperacaoNaoPermitidaException("O grupo não pode ficar sem administradores");
 
         } else if (grupo.getDono().equals(participante.getParticipante())) {
+
             throw new OperacaoNaoPermitidaException("Não pode retirar o privilegio de administração do dono do grupo");
 
         }
@@ -116,8 +118,14 @@ public class ParticipanteController {
             return "redirect:/";
         }
 
-        Participante participante;
-        participante = fachada.buscarUsuario(email);
+        Participante participante = null;
+
+        try {
+            participante = fachada.buscarUsuario(email);
+        } catch (EntidadeNaoCadastradaException err) {
+            return "redirect:/grupo/" + id + "/add_participante";
+
+        }
 
         Grupo grupo = fachada.buscarGrupo(id);
 

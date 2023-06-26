@@ -158,7 +158,9 @@ public class GrupoController {
 
         grupo.setCaixinha(builder.build());
 
-        fachada.cadastrarGrupo(grupo);
+        Grupo grupo2 = fachada.cadastrarGrupo(grupo);
+        fachada.cadastrarParticipante(grupo2, (Grupo) user.getParente());
+
         return "redirect:/usuario";
     }
 

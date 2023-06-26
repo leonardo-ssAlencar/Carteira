@@ -52,11 +52,11 @@ public class LancamentoController {
         LancamentoCommand command;
 
         switch (operacoes) {
-            case CREDITO:
+            case RECEITA:
                 command = new CreditoCommand(grupo, valor, logado, mensagem, factory);
                 break;
 
-            case DEBITO:
+            case DESPESA:
                 command = new DebitoCommand(grupo, valor, logado, mensagem, factory);
                 break;
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.padroes.projetos.carteira.model.entidades.caixinha.Caixinha;
@@ -14,8 +15,6 @@ import com.padroes.projetos.carteira.repository.RepositorioGrupo;
 @EnableScheduling
 public class Agendamentos {
 
-    // private final String timeZone = "America/Sao_Paulo";
-
     @Autowired
     RepositorioCaixinha caixaRepo;
     @Autowired
@@ -23,8 +22,7 @@ public class Agendamentos {
     @Autowired
     RepositorioGrupo grupoRepo;
 
-    // @Scheduled(cron = "0 0 0", zone = timeZone)
-    // @Scheduled(fixedDelay = 1000 * 10)
+    @Scheduled(cron = "0 0 0 ? * * ")
     public void fechamentoCaixinha() {
 
         List<Caixinha> lista = caixaRepo.caixinhasFechadas();

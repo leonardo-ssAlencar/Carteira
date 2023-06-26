@@ -39,6 +39,13 @@ public class ParticipanteController {
         fachada.deletarParticipante(participante);
         fachada.deletarParticipante(gParticipante);
 
+        Notificacoes notificacoes = new Notificacoes(
+                "Vc foi removido do grupo: " + participante.getParticipante().getNome());
+
+        participante.getParticipante().notificar(notificacoes);
+
+        fachada.salvarNotificacoes(notificacoes);
+
         return "redirect:/grupo/" + gId;
 
     }
@@ -109,7 +116,9 @@ public class ParticipanteController {
             return "redirect:/";
         }
 
-        Participante participante = fachada.buscarUsuario(email);
+        Participante participante;
+        participante = fachada.buscarUsuario(email);
+
         Grupo grupo = fachada.buscarGrupo(id);
 
         fachada.cadastrarParticipante(participante.getParticipante(), grupo);

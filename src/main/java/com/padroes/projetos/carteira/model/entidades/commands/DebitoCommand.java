@@ -14,7 +14,7 @@ public class DebitoCommand extends LancamentoCommand {
 
     public DebitoCommand(Grupo grupo, BigDecimal valor, Usuario user, String descricao, LancamentoFactory factory) {
         super(grupo);
-        this.lancamento = factory.criarLancamento(user, valor, descricao, OperacoesEnum.DEBITO);
+        this.lancamento = factory.criarLancamento(user, valor, descricao, OperacoesEnum.DESPESA);
 
     }
 

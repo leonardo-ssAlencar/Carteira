@@ -73,8 +73,6 @@ public class AplicacaoFachada {
 
         grupo = grupoRepo.save(grupo);
 
-        cadastrarParticipante(grupo.getDono(), grupo);
-
         return grupo;
 
     }

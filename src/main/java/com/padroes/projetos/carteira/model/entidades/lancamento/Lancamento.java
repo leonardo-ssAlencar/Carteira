@@ -78,10 +78,10 @@ public class Lancamento {
 
     public Operacao getOperacao() {
 
-        if (this.operacao == OperacoesEnum.CREDITO) {
+        if (this.operacao == OperacoesEnum.RECEITA) {
             return new Credito(valor);
 
-        } else if (this.operacao == OperacoesEnum.DEBITO) {
+        } else if (this.operacao == OperacoesEnum.DESPESA) {
             return new Debito(valor);
         }
 
@@ -97,9 +97,6 @@ public class Lancamento {
         String formatador = "dd/MM/yyyy - HH:mm:ss";
 
         return dataHoraLancamento.format(DateTimeFormatter.ofPattern(formatador));
-
-
-
 
     }
 

@@ -5,11 +5,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.padroes.projetos.carteira.model.entidades.grupo.Usuario;
-import com.padroes.projetos.carteira.model.excecoes.UsuarioNaoExisteException;
 import com.padroes.projetos.carteira.service.AplicacaoFachada;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,12 +22,14 @@ public class LoginController {
     private AplicacaoFachada fachada;
 
     @PostMapping("/fazerLogin")
-    public String fazerLogin(@Param("email") String email, @Param("senha") String senha, HttpServletRequest request) {
+    public String fazerLogin(@Param("email") String email, @Param("senha") String senha, HttpServletRequest request,
+            BindingResult result) {
 
         Optional<Usuario> user = fachada.validarUsuario(email, senha);
 
         if (user.isEmpty()) {
-            throw new UsuarioNaoExisteException("O Usuario não existe");
+            result.addError(new ObjectError("globalError", "O Usuario não existe, ou a senha esta incorreta"));
+            return "login";
         }
 
         request.getSession().setAttribute("userLogado", user.get());

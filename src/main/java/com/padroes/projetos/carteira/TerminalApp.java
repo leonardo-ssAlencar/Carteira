@@ -61,6 +61,8 @@ public class TerminalApp {
 
                 grupoA = fachada.cadastrarGrupo(grupoA);
 
+                fachada.cadastrarParticipante(grupoA, (Grupo) user1.getParente());
+
                 // FIM
 
                 // Cadastrar Participante INICIO
@@ -103,6 +105,7 @@ public class TerminalApp {
                 grupoB.setCaixinha(builder.build());
 
                 grupoB = fachada.cadastrarGrupo(grupoB);
+                fachada.cadastrarParticipante(grupoB, (Grupo) user1.getParente());
 
                 fachada.cadastrarParticipante(user2, grupoB);
                 fachada.cadastrarParticipante(user3, grupoB);

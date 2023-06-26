@@ -102,8 +102,9 @@ public class GrupoController {
 
         Grupo grupo = fachada.buscarGrupo(id);
 
-        if (user == grupo.getDono()) {
-            return "redirect:/grupo/" + id + "/remover_grupo";
+        if (user.equals(grupo.getDono())) {
+            deletarGrupo(request, id);
+            return "redirect:/usuario";
         }
 
         Participante participante = fachada.participante(user, grupo);

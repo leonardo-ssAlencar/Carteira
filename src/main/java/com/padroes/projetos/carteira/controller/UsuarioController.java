@@ -40,6 +40,7 @@ public class UsuarioController {
         BigDecimal valor = service.calcularValorTotal(lancamentos.stream().map(Lancamento::getValor).toList());
 
         List<Grupo> pGrupos = participantes.stream().filter(Participante::eGrupo).map(x -> (Grupo) x.getParticipante())
+                .filter(x -> x.getCaixinha() != null)
                 .toList();
 
         pGrupos.forEach(x -> {
